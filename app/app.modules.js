@@ -32,7 +32,7 @@ var app = angular.module('myApp', ['ngRoute'])
                     }
                     itr += num;
                     return value;
-                },
+                }/*,
                 reset: function () {
                     itr = 0;
                     deck = window.cards;
@@ -42,6 +42,6 @@ var app = angular.module('myApp', ['ngRoute'])
                 },
                 isblack: function (card) {
                     return (card.suit === "♣" || card.suit === "♠");
-                }
+                }*/
             };
         });

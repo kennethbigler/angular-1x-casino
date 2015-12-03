@@ -4,9 +4,14 @@ app.controller('PokerController', function ($scope, $deck) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
-    var hand, i, rankSort, suitSort;
+    var i, rankSort, suitSort;
     $scope.trash = [];
+    
+    /******************************     Prep Helper Functions     ******************************/
+    // sort cards by rank
     rankSort = function (a, b) {return a.rank - b.rank; };
+    
+    // sort cards by suit
     suitSort = function (a, b) {
         var ta, tb;
         switch (a.suit) {
@@ -46,7 +51,6 @@ app.controller('PokerController', function ($scope, $deck) {
         return ta - tb;
     };
     
-    /******************************     Prep Helper Functions     ******************************/
     /* Pass in an array of index numbers
      * iterate through array, removing each index number from hand
      * add new cards to the hand
@@ -59,8 +63,7 @@ app.controller('PokerController', function ($scope, $deck) {
     }
     
     /* Compare hands to see who wins
-     * Hands should be assigned 3 hex values:
-     *     poker hand, high card, high suit
+     * Hands is assigned a weight based on hand, then card values
      * Compare values to see who wins
      * Rankings:
      *   Straight Flush  8
@@ -72,6 +75,7 @@ app.controller('PokerController', function ($scope, $deck) {
      *   2 Pair          2
      *   1 Pair          1
      *   High Card       0
+     * Return value is a base 13 string, to be converted into base 10 for comparison
     */
     function evaluate(hand) {
         var i, j, hist, temp, s, f;
@@ -154,6 +158,9 @@ app.controller('PokerController', function ($scope, $deck) {
         }
     }
     
+    /* Iterate through the hnad outputing the name of each to the console
+     * This function is for testing purposes only
+     */
     function print(hand) {
         $scope.hand.sort(rankSort);
         for (i = 0; i < hand.length; i += 1) {
@@ -175,7 +182,7 @@ app.controller('PokerController', function ($scope, $deck) {
         var i = $scope.trash.indexOf(t);
         if (i !== -1) {
             //splice: (index where, how many to remove)
-            $scope.hand.splice(i, 1);
+            $scope.trash.splice(i, 1);
         } else {
             $scope.trash.push(t);
         }
@@ -186,14 +193,18 @@ app.controller('PokerController', function ($scope, $deck) {
     $scope.discard = function () {
         discard($scope.trash);
         $scope.trash = [];
+        print($scope.hand);
     };
     
-    
+    // shuffle the deck and re-distribute hands
+    $scope.newGame = function () {
+        $deck.shuffle();
+        $scope.hand = $deck.deal(5);
+        $scope.hand.sort(suitSort);
+        print($scope.hand);
+    };
     
     /******************************     Testing     ******************************/
-    $deck.shuffle();
-    hand = $deck.deal(5);
-    $scope.hand = hand;
-    $scope.hand.sort(suitSort);
-    print($scope.hand);
+    $scope.newGame();
+    console.log($scope.hand);
 });

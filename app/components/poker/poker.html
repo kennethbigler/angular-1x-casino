@@ -2,17 +2,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-9">
-            <div style="height: 120px;">
-                <div style="width: 30px; height: 50px; background-color: black; border-radius: 5px; float:left; margin: 5px; color:white;" ng-click="toss(0)">1</div>
-                <div style="width: 30px; height: 50px; background-color: black; border-radius: 5px; float:left; margin: 5px; color:white;" ng-click="toss(1)">2</div>
-                <div style="width: 30px; height: 50px; background-color: black; border-radius: 5px; float:left; margin: 5px; color:white;" ng-click="toss(2)">3</div>
-                <div style="width: 30px; height: 50px; background-color: black; border-radius: 5px; float:left; margin: 5px; color:white;" ng-click="toss(3)">4</div>
-                <div style="width: 30px; height: 50px; background-color: black; border-radius: 5px; float:left; margin: 5px; color:white;" ng-click="toss(4)">5</div>
+            <div ng-repeat="card in hand track by $index" class="playingCard handc" ng-style='card.color' ng-click="toss($index)">
+                {{ card.name }}
+                <h2>{{ card.suit }}</h2>
             </div>
+            <span class="clear"></span>
         </div>
         <div class="col-sm-3">
             <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="discard()">Discard</a>
             <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="evaluate()">Evaluate</a>
+            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="newGame()">New Game</a>
         </div>
     </div>
 </div>
