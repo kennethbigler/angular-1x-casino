@@ -4,15 +4,17 @@ app.controller('PokerController', function ($scope, $deck) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
-    var i, rankSort, suitSort;
+    var hands = [],
+        turn = 0;
     $scope.trash = [];
+    $scope.players = 2;
     
     /******************************     Prep Helper Functions     ******************************/
     // sort cards by rank
-    rankSort = function (a, b) {return a.rank - b.rank; };
+    function rankSort(a, b) {return a.rank - b.rank; }
     
     // sort cards by suit
-    suitSort = function (a, b) {
+    function suitSort(a, b) {
         var ta, tb;
         switch (a.suit) {
         case "♦":
@@ -49,16 +51,16 @@ app.controller('PokerController', function ($scope, $deck) {
             console.log("Error! Suit is " + b.suit);
         }
         return ta - tb;
-    };
+    }
     
     /* Pass in an array of index numbers
      * iterate through array, removing each index number from hand
      * add new cards to the hand
     */
-    function discard(cards) {
+    function discard(cards, p) {
         var i;
         for (i = 0; i < cards.length; i += 1) {
-            $scope.hand[cards[i]] = $deck.deal(1)[0];
+            hands[p][cards[i]] = $deck.deal(1)[0];
         }
     }
     
@@ -162,7 +164,8 @@ app.controller('PokerController', function ($scope, $deck) {
      * This function is for testing purposes only
      */
     function print(hand) {
-        $scope.hand.sort(rankSort);
+        hand.sort(rankSort);
+        var i;
         for (i = 0; i < hand.length; i += 1) {
             console.log(hand[i].name);
         }
@@ -172,9 +175,21 @@ app.controller('PokerController', function ($scope, $deck) {
     // call the evaluate function for each hand and determine winner
     $scope.evaluate = function () {
         // to determine winner, decode w/ z = parseInt(result, 13);
-        var r = evaluate($scope.hand);
-        console.log(r);
-        console.log(parseInt(r, 13));
+        var i = 0,
+            max = 0,
+            player = 0,
+            temp = 0,
+            r = [];
+        for (i = 0; i < $scope.players; i += 1) {
+            r[i] = evaluate(hands[i]);
+            console.log(r[i]);
+            temp = parseInt(r[i], 13);
+            if (temp > max) {
+                max = temp;
+                player = i;
+            }
+        }
+        console.log("player " + player + " wins with " + max + " points");
     };
     
     // select cards to discard
@@ -190,21 +205,25 @@ app.controller('PokerController', function ($scope, $deck) {
     };
     
     // discard selected cards and get replacements
-    $scope.discard = function () {
-        discard($scope.trash);
+    $scope.discard = function (p) {
+        discard($scope.trash, p);
         $scope.trash = [];
-        print($scope.hand);
+        print(hands[p]);
     };
     
     // shuffle the deck and re-distribute hands
     $scope.newGame = function () {
+        var i;
         $deck.shuffle();
-        $scope.hand = $deck.deal(5);
-        $scope.hand.sort(suitSort);
-        print($scope.hand);
+        for (i = 0; i < $scope.players; i += 1) {
+            $scope['hand' + i] = $deck.deal(5);
+            hands[i].sort(suitSort);
+            print(hands[i]);
+        }
+        turn = 0;
+        $scope.hand = hands[turn];
     };
     
     /******************************     Testing     ******************************/
     $scope.newGame();
-    console.log($scope.hand);
 });
