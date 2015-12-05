@@ -2,15 +2,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-9">
+            <h2>Player {{ turn + 1 }}</h2>
             <div ng-repeat="card in hand track by $index" class="playingCard handc" ng-style='card.color' ng-click="toss($index)">
                 {{ card.name }}
-                <h2>{{ card.suit }}</h2>
+                <h2 class="suit">{{ card.suit }}</h2>
             </div>
             <span class="clear"></span>
         </div>
         <div class="col-sm-3">
+            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="nextHand()">Next</a>
             <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="discard()">Discard</a>
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="evaluate()">Evaluate</a>
             <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="newGame()">New Game</a>
         </div>
     </div>
