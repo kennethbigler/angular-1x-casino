@@ -77,6 +77,7 @@ window.cards = [
     }, {
         "name": "4♦",
         "rank": 4,
+        "suit": "♦",
         "color": {"color" : "#D9183B"}
     }, {
         "name": "5♦",
