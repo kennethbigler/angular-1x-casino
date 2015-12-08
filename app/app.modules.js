@@ -6,6 +6,7 @@ var app = angular.module('myApp', ['ngRoute'])
             var deck = window.cards,
                 itr = 0;
             return {
+                // randomize order of the cards
                 shuffle: function () {
                     deck = window.cards;
                     itr = 0;
@@ -21,6 +22,7 @@ var app = angular.module('myApp', ['ngRoute'])
                     }
                     return;
                 },
+                // return an array of a specified length
                 deal: function (num) {
                     if ((num + itr) > 52) {
                         console.log("Not Enough Cards Left");
@@ -32,16 +34,54 @@ var app = angular.module('myApp', ['ngRoute'])
                     }
                     itr += num;
                     return value;
+                },
+                // sort cards by rank
+                rankSort: function (a, b) {
+                    return a.rank - b.rank;
                 }/*,
+                // sort cards by suit
+                suitSort: function (a, b) {
+                    var ta, tb;
+                    switch (a.suit) {
+                    case "♦":
+                        ta = 0;
+                        break;
+                    case "♣":
+                        ta = 1;
+                        break;
+                    case "♥":
+                        ta = 2;
+                        break;
+                    case "♠":
+                        ta = 3;
+                        break;
+                    default:
+                        ta = 0;
+                        console.log("Error! Suit is " + a.suit);
+                    }
+                    switch (b.suit) {
+                    case "♦":
+                        tb = 0;
+                        break;
+                    case "♣":
+                        tb = 1;
+                        break;
+                    case "♥":
+                        tb = 2;
+                        break;
+                    case "♠":
+                        tb = 3;
+                        break;
+                    default:
+                        tb = 0;
+                        console.log("Error! Suit is " + b.suit);
+                    }
+                    return ta - tb;
+                },
+                // old function, now done every time the deck is shuffled
                 reset: function () {
                     itr = 0;
                     deck = window.cards;
-                },
-                isred: function (card) {
-                    return (card.suit === "♦" || card.suit === "♥");
-                },
-                isblack: function (card) {
-                    return (card.suit === "♣" || card.suit === "♠");
                 }*/
             };
         });

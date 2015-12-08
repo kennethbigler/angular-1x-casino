@@ -20,7 +20,10 @@
         'app/app.modules.js',
         'app/app.routes.js',
         'app/components/home/HomeController.js',
+        'app/components/blackjack/BlackjackController.js',
+        'app/components/craps/CrapsController.js',
         'app/components/poker/PokerController.js',
+        'app/components/roulette/RouletteController.js',
         'app/components/solitaire/SolitaireController.js'
     ].forEach(function(src) {
         var script = document.createElement('script');
@@ -58,7 +61,10 @@
             <div id="navbar" class="navbar-collapse collapse navbar-right navbar-nav">
                 <ul class="nav navbar-nav">
                     <li ng-class="getClass('/')"><a href="#/" ng-click="closeNav()">Home</a></li>
+                    <li ng-class="getClass('/blackjack')"><a href="#/blackjack" ng-click="closeNav()">Blackjack</a></li>
+                    <li ng-class="getClass('/craps')"><a href="#/craps" ng-click="closeNav()">Craps</a></li>
                     <li ng-class="getClass('/poker')"><a href="#/poker" ng-click="closeNav()">Poker</a></li>
+                    <li ng-class="getClass('/roulette')"><a href="#/roulette" ng-click="closeNav()">Roulette</a></li>
                     <li ng-class="getClass('/solitaire')"><a href="#/solitaire" ng-click="closeNav()">Solitaire</a></li>
                 </ul>
             </div><!-- /Menu -->

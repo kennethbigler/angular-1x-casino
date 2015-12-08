@@ -13,49 +13,6 @@ app.controller('PokerController', function ($scope, $deck) {
     $scope.dropped = ["", "", "", "", ""];
     
     /******************************     Prep Helper Functions     ******************************/
-    // sort cards by rank
-    function rankSort(a, b) {return a.rank - b.rank; }
-    
-    // sort cards by suit
-    /*function suitSort(a, b) {
-        var ta, tb;
-        switch (a.suit) {
-        case "♦":
-            ta = 0;
-            break;
-        case "♣":
-            ta = 1;
-            break;
-        case "♥":
-            ta = 2;
-            break;
-        case "♠":
-            ta = 3;
-            break;
-        default:
-            ta = 0;
-            console.log("Error! Suit is " + a.suit);
-        }
-        switch (b.suit) {
-        case "♦":
-            tb = 0;
-            break;
-        case "♣":
-            tb = 1;
-            break;
-        case "♥":
-            tb = 2;
-            break;
-        case "♠":
-            tb = 3;
-            break;
-        default:
-            tb = 0;
-            console.log("Error! Suit is " + b.suit);
-        }
-        return ta - tb;
-    }*/
-    
     /* Pass in an array of index numbers
      * iterate through array, removing each index number from hand
      * add new cards to the hand
@@ -167,7 +124,7 @@ app.controller('PokerController', function ($scope, $deck) {
      * This function is for testing purposes only
      */
     /*function print(hand) {
-        hand.sort(rankSort);
+        hand.sort($deck.rankSort);
         var i;
         for (i = 0; i < hand.length; i += 1) {
             console.log(hand[i].name);
@@ -193,7 +150,7 @@ app.controller('PokerController', function ($scope, $deck) {
     $scope.discard = function () {
         discard($scope.trash, $scope.turn);
         $scope.dropped = ["", "", "", "", ""];
-        $scope.hand.sort(rankSort);
+        $scope.hand.sort($deck.rankSort);
         $scope.trash = [];
         $scope.df = true;
         //print(hands[$scope.turn]);
@@ -241,7 +198,7 @@ app.controller('PokerController', function ($scope, $deck) {
         $deck.shuffle();
         for (i = 0; i < $scope.players; i += 1) {
             hands[i] = $deck.deal(5);
-            hands[i].sort(rankSort);
+            hands[i].sort($deck.rankSort);
             //print(hands[i]);
         }
         $scope.df = false;
