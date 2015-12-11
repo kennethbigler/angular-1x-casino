@@ -208,4 +208,114 @@ app.controller('PokerController', function ($scope, $deck) {
     
     /******************************     Testing     ******************************/
     $scope.newGame();
+
+    /* computer play algorithm:
+    PAIRS
+    draw 0 on 4 of a kind
+    draw 0 on full house
+    draw 1 on 3 of a kind, keep higher of 2
+    draw 1 on 2 pair
+    draw 3 on 2 of a kind
+
+    STRAIGHT/FLUSH
+    draw 0 on s
+    draw 0 on f
+    draw 0 on sf
+    if 1 away from sf -> draw 1
+    if 1 away from S -> draw 1 if 5+ players, else regular hand
+    if 1 away from F -> draw 1 if 5+ players, else regular hand
+
+    REGULAR HAND
+    if K / A -> draw 4
+    else draw 5
+    */
+    function computer(hand) {
+        var i, j, hist, temp, s, f;
+        // Histogram for the cards
+        hist = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        // put hand into the histrogram        
+        for (i = 0; i < hand.length; i += 1) {
+            temp = hand[i].rank - 2; //2-14 - 2 = 0-12
+            hist[temp] += 1;
+        }
+        // iterate through and look for hands with multiple cards
+        temp = hist.indexOf(4);
+        // 4 of a kind
+        if (temp !== -1) {
+            console.log(temp);
+            // draw 0 on 4 of a kind
+            return "7" + temp.toString(13) + "0000";
+            // for texas holdem, need to return indexOf(1) instead of first 0
+        }
+        temp = hist.indexOf(3);
+        i = hist.indexOf(2);
+        j = hist.indexOf(2, i + 1);
+        if (temp !== -1 && i !== -1) {
+            // full house
+            // draw 0 on full house
+            return "6" + temp.toString(13) + i.toString(13) + "000";
+        } else if (temp !== -1) {
+            // 3 of a kind
+            i = hist.lastIndexOf(1).toString(13);
+            // draw 1 on 3 of a kind, keep higher of 2
+            j = hist.indexOf(1).toString(13);
+            // find low card in hand, remove, then run evaluate
+            // return "3" + temp.toString(13) + i + j + "00";
+            // HERE
+            // return evaluate(hand);
+        } else if (i !== -1 && j !== -1) {
+            // 2 pair
+            temp = hist.indexOf(1).toString(13);
+            // find low card in hand, remove, then run evaluate
+            // return "2" + j.toString(13) + i.toString(13) + temp + "00";
+            // HERE
+            // return evaluate(hand);
+        } else if (i !== -1) {
+            // 1 pair
+            j = hist.lastIndexOf(1);
+            temp = hist.lastIndexOf(1, j - 1).toString(13);
+            s = hist.indexOf(1).toString(13);
+            return "1" + i.toString(13) + j.toString(13) + temp + s + "0";
+        } else {
+            // all single cards, look for flush and straight
+            temp = hist.indexOf(1);
+            j = hist.lastIndexOf(1);
+            // check for straight
+            s = ((j - temp) === 4);
+            // A,2,3,4,5
+            if (!s) {
+                s = (hist[0] === 1 && hist[1] === 1 && hist[2] === 1 && hist[3] === 1 && hist[12] === 1);
+            }
+            // check for flush
+            for (i = 0; i < hand.length; i += 1) {
+                if (i === hand.length - 1) {
+                    f = true;
+                    break;
+                } else if (hand[i].suit !== hand[i + 1].suit) {
+                    f = false;
+                    break;
+                }
+            }
+            if (s && f) {
+                return "8" + j.toString(13) + "0000";
+            } else if (f) {
+                // flush
+                i = hist.lastIndexOf(1, j - 1);
+                temp = hist.lastIndexOf(1, i - 1);
+                s = hist.lastIndexOf(1, temp - 1);
+                f = hist.lastIndexOf(1, s - 1);
+                return "5" + j.toString(13) + i.toString(13) + temp.toString(13) + s.toString(13) + f.toString(13);
+            } else if (s) {
+                // straight
+                return "4" + j.toString(13) + "0000";
+            } else {
+                // high card
+                i = hist.lastIndexOf(1, j - 1);
+                temp = hist.lastIndexOf(1, i - 1);
+                s = hist.lastIndexOf(1, temp - 1);
+                f = hist.lastIndexOf(1, s - 1);
+                return "0" + j.toString(13) + i.toString(13) + temp.toString(13) + s.toString(13) + f.toString(13);
+            }
+        }
+    }
 });
