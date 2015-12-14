@@ -12,8 +12,8 @@ var app = angular.module('myApp', ['ngRoute'])
                     itr = 0;
                     var n = 100, i, j, k, temp;
                     for (i = 0; i < n; i += 1) {
-                        j = Math.round(Math.random() * 51);
-                        k = Math.round(Math.random() * 51);
+                        j = Math.floor(Math.random() * 52) + 1;
+                        k = Math.floor(Math.random() * 52) + 1;
                         if (j > 51) { j = 51; }
                         if (k > 51) { k = 51; }
                         temp = deck[j];

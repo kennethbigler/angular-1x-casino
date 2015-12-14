@@ -44,8 +44,12 @@ header {
     clear:   left;
     display: block;
 }
+.inline {
+    display: inline;
+    float: left;
+}
 
-/***** cards *****/
+/***** Wording *****/
 .naration {
     margin: 10px;
     color: white;

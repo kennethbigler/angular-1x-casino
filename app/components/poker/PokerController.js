@@ -6,10 +6,12 @@ app.controller('PokerController', function ($scope, $deck) {
     /******************************     Prep Data and Variables     ******************************/
     var hands = [];
     $scope.trash = [];
-    $scope.players = 2;
+    $scope.players = 1;
+    $scope.ai = 3;
     $scope.turn = 0;
     $scope.df = false;
     $scope.nf = false;
+    $scope.pf = false;
     $scope.dropped = ["", "", "", "", ""];
     
     /******************************     Prep Helper Functions     ******************************/
@@ -120,95 +122,6 @@ app.controller('PokerController', function ($scope, $deck) {
         }
     }
     
-    /* Iterate through the hnad outputing the name of each to the console
-     * This function is for testing purposes only
-     */
-    /*function print(hand) {
-        hand.sort($deck.rankSort);
-        var i;
-        for (i = 0; i < hand.length; i += 1) {
-            console.log(hand[i].name);
-        }
-    }*/
-    
-    /******************************     Prep View Functions     ******************************/
-    // select cards to discard
-    $scope.toss = function (t) {
-        var i = $scope.trash.indexOf(t);
-        if (i !== -1) {
-            //splice: (index where, how many to remove)
-            $scope.trash.splice(i, 1);
-            $scope.dropped[t] = "";
-        } else {
-            $scope.trash.push(t);
-            $scope.dropped[t] = "dropped";
-        }
-        console.log($scope.trash);
-    };
-    
-    // discard selected cards and get replacements
-    $scope.discard = function () {
-        discard($scope.trash, $scope.turn);
-        $scope.dropped = ["", "", "", "", ""];
-        $scope.hand.sort($deck.rankSort);
-        $scope.trash = [];
-        $scope.df = true;
-        //print(hands[$scope.turn]);
-    };
-    
-    // move to the next hand
-    $scope.nextHand = function () {
-        if ($scope.turn === $scope.players - 1) {
-            // to determine winner, decode w/ z = parseInt(result, 13);
-            var i = 0,
-                max = 0,
-                player = 0,
-                temp = 0,
-                r = [];
-            for (i = 0; i < $scope.players; i += 1) {
-                r[i] = evaluate(hands[i]);
-                console.log(r[i]);
-                temp = parseInt(r[i], 13);
-                if (temp > max) {
-                    max = temp;
-                    player = i;
-                }
-            }
-            $scope.players = false;
-            $scope.df = true;
-            $scope.nf = true;
-            $scope.dropped = ["", "", "", "", ""];
-            $scope.trash = [];
-            $scope.turn = "Player " + (player + 1) + " wins with:";
-            $scope.hand = hands[player];
-        } else {
-            $scope.turn += 1;
-            $scope.df = false;
-            $scope.dropped = ["", "", "", "", ""];
-            $scope.trash = [];
-            $scope.hand = hands[$scope.turn];
-        }
-    };
-    
-    // shuffle the deck and re-distribute hands
-    $scope.newGame = function () {
-        var i;
-        $scope.turn = 0;
-        $scope.players = 2;
-        $deck.shuffle();
-        for (i = 0; i < $scope.players; i += 1) {
-            hands[i] = $deck.deal(5);
-            hands[i].sort($deck.rankSort);
-            //print(hands[i]);
-        }
-        $scope.df = false;
-        $scope.nf = false;
-        $scope.hand = hands[$scope.turn];
-    };
-    
-    /******************************     Testing     ******************************/
-    $scope.newGame();
-
     /* computer play algorithm:
     PAIRS
     draw 0 on 4 of a kind
@@ -217,6 +130,7 @@ app.controller('PokerController', function ($scope, $deck) {
     draw 1 on 2 pair
     draw 3 on 2 of a kind
 
+    This is a nice to have, for now we only follow the first half
     STRAIGHT/FLUSH
     draw 0 on s
     draw 0 on f
@@ -230,7 +144,7 @@ app.controller('PokerController', function ($scope, $deck) {
     else draw 5
     */
     function computer(hand) {
-        var i, j, hist, temp, s, f;
+        var i, j, hist, temp, s, f, x, y;
         // Histogram for the cards
         hist = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         // put hand into the histrogram        
@@ -240,42 +154,64 @@ app.controller('PokerController', function ($scope, $deck) {
         }
         // iterate through and look for hands with multiple cards
         temp = hist.indexOf(4);
-        // 4 of a kind
         if (temp !== -1) {
             console.log(temp);
             // draw 0 on 4 of a kind
             return "7" + temp.toString(13) + "0000";
-            // for texas holdem, need to return indexOf(1) instead of first 0
         }
         temp = hist.indexOf(3);
         i = hist.indexOf(2);
         j = hist.indexOf(2, i + 1);
         if (temp !== -1 && i !== -1) {
-            // full house
             // draw 0 on full house
             return "6" + temp.toString(13) + i.toString(13) + "000";
         } else if (temp !== -1) {
-            // 3 of a kind
-            i = hist.lastIndexOf(1).toString(13);
             // draw 1 on 3 of a kind, keep higher of 2
-            j = hist.indexOf(1).toString(13);
             // find low card in hand, remove, then run evaluate
-            // return "3" + temp.toString(13) + i + j + "00";
-            // HERE
-            // return evaluate(hand);
+            print(hand);
+            temp = [];
+            j = hist.indexOf(1);
+            for (i = 0; i < hand.length; i += 1) {
+                if (j === hand[i].rank - 2) {
+                    temp.push(i);
+                    break;
+                }
+            }
+            discard(temp, $scope.turn);
+            print(hand);
+            return evaluate(hands[$scope.turn]);
         } else if (i !== -1 && j !== -1) {
-            // 2 pair
-            temp = hist.indexOf(1).toString(13);
+            // draw 1 on 2 pairs
             // find low card in hand, remove, then run evaluate
-            // return "2" + j.toString(13) + i.toString(13) + temp + "00";
-            // HERE
-            // return evaluate(hand);
+            print(hand);
+            temp = [];
+            j = hist.indexOf(1);
+            for (i = 0; i < hand.length; i += 1) {
+                if (j === hand[i].rank - 2) {
+                    temp.push(i);
+                    break;
+                }
+            }
+            discard(temp, $scope.turn);
+            print(hand);
+            return evaluate(hands[$scope.turn]);
         } else if (i !== -1) {
-            // 1 pair
-            j = hist.lastIndexOf(1);
-            temp = hist.lastIndexOf(1, j - 1).toString(13);
-            s = hist.indexOf(1).toString(13);
-            return "1" + i.toString(13) + j.toString(13) + temp + s + "0";
+            // draw 3 on 1 pair
+            // find index of 3 lower cards and replace
+            temp = [];
+            print(hand);
+            j = hist.indexOf(1);
+            s = hist.indexOf(1, j + 1);
+            f = hist.indexOf(1, s + 1);
+            for (i = 0; i < hand.length; i += 1) {
+                x = hand[i].rank - 2;
+                if (j === x || s === x || f === x) {
+                    temp.push(i);
+                }
+            }
+            discard(temp, $scope.turn);
+            print(hand);
+            return evaluate(hands[$scope.turn]);
         } else {
             // all single cards, look for flush and straight
             temp = hist.indexOf(1);
@@ -310,12 +246,134 @@ app.controller('PokerController', function ($scope, $deck) {
                 return "4" + j.toString(13) + "0000";
             } else {
                 // high card
-                i = hist.lastIndexOf(1, j - 1);
-                temp = hist.lastIndexOf(1, i - 1);
-                s = hist.lastIndexOf(1, temp - 1);
-                f = hist.lastIndexOf(1, s - 1);
-                return "0" + j.toString(13) + i.toString(13) + temp.toString(13) + s.toString(13) + f.toString(13);
+                i = hist.lastIndexOf(1);
+                if (i === 12 || i === 11) {
+                    // if ace || king
+                    temp = [];
+                    j = hist.indexOf(1);
+                    s = hist.indexOf(1, j + 1);
+                    f = hist.indexOf(1, s + 1);
+                    y = hist.indexOf(1, f + 1);
+                    for (i = 0; i < hand.length; i += 1) {
+                        x = hand[i].rank - 2;
+                        if (j === x || s === x || f === x || y === x) {
+                            temp.push(i);
+                        }
+                    }
+                    print(hand);
+                    discard(temp, $scope.turn);
+                    print(hand);
+                    return evaluate(hands[$scope.turn]);
+                } else {
+                    // discard whole hand
+                    temp = [0, 1, 2, 3, 4];
+                    print(hand);
+                    discard(temp, $scope.turn);
+                    print(hand);
+                    return evaluate(hands[$scope.turn]);
+                }
             }
         }
     }
+    
+    /* Iterate through the hnad outputing the name of each to the console
+     * This function is for testing purposes only
+     */
+    function print(hand) {
+        console.log("-----");
+        hand.sort($deck.rankSort);
+        var i;
+        for (i = 0; i < hand.length; i += 1) {
+            console.log(hand[i].name);
+        }
+    }
+    
+    /******************************     Prep View Functions     ******************************/
+    // select cards to discard
+    $scope.toss = function (t) {
+        var i = $scope.trash.indexOf(t);
+        if (i !== -1) {
+            //splice: (index where, how many to remove)
+            $scope.trash.splice(i, 1);
+            $scope.dropped[t] = "";
+        } else {
+            $scope.trash.push(t);
+            $scope.dropped[t] = "dropped";
+        }
+        console.log($scope.trash);
+    };
+    
+    // discard selected cards and get replacements
+    $scope.discard = function () {
+        discard($scope.trash, $scope.turn);
+        $scope.dropped = ["", "", "", "", ""];
+        $scope.hand.sort($deck.rankSort);
+        $scope.trash = [];
+        $scope.df = true;
+        //print(hands[$scope.turn]);
+    };
+    
+    // move to the next hand
+    $scope.nextHand = function () {
+        if ($scope.turn === $scope.players - 1) {
+            // to determine winner, decode w/ z = parseInt(result, 13);
+            var i = 0,
+                max = 0,
+                player = 0,
+                temp = 0;
+            for (i = 0; i < $scope.players; i += 1) {
+                temp = parseInt(evaluate(hands[i]), 13);
+                if (temp > max) {
+                    max = temp;
+                    player = i;
+                }
+            }
+            for (i = 0; i < $scope.ai; i += 1) {
+                temp = computer(hands[i + $scope.players]);
+                console.log(temp);
+                temp = parseInt(computer(hands[i + $scope.players]), 13);
+                if (temp > max) {
+                    max = temp;
+                    player = i + $scope.players;
+                }
+            }
+            $scope.pf = false;
+            $scope.df = true;
+            $scope.nf = true;
+            $scope.dropped = ["", "", "", "", ""];
+            $scope.trash = [];
+            $scope.turn = "Player " + (player + 1) + " wins with:";
+            $scope.hand = hands[player];
+            $scope.hands = hands;
+            //console.log($scope.hands);
+        } else {
+            $scope.turn += 1;
+            $scope.df = false;
+            $scope.dropped = ["", "", "", "", ""];
+            $scope.trash = [];
+            $scope.hand = hands[$scope.turn];
+        }
+    };
+    
+    // shuffle the deck and re-distribute hands
+    $scope.newGame = function () {
+        var i;
+        $scope.turn = 0;
+        $deck.shuffle();
+        for (i = 0; i < ($scope.players + $scope.ai); i += 1) {
+            hands[i] = $deck.deal(5);
+            hands[i].sort($deck.rankSort);
+            //print(hands[i]);
+        }
+        $scope.df = false;
+        $scope.nf = false;
+        $scope.pf = true;
+        $scope.dropped = ["", "", "", "", ""];
+        $scope.trash = [];
+        $scope.hands = [];
+        $scope.hand = hands[$scope.turn];
+    };
+    
+    /******************************     Testing     ******************************/
+    $scope.newGame();
 });
