@@ -6,11 +6,12 @@ app.controller('PokerController', function ($scope, $deck) {
     /******************************     Prep Data and Variables     ******************************/
     var hands = [];
     $scope.trash = [];
-    $scope.players = 1;
-    $scope.ai = 3;
+    $scope.players = 2;
+    $scope.ai = 2;
     $scope.turn = 0;
     $scope.df = false;
     $scope.nf = false;
+    $scope.sf = false;
     $scope.dropped = ["", "", "", "", ""];
     
     /******************************     Helper Functions     ******************************/
@@ -294,8 +295,9 @@ app.controller('PokerController', function ($scope, $deck) {
     
     // move to the next hand
     $scope.nextHand = function () {
+        $scope.sf = false;
         $scope.turn += 1;
-        if ($scope.turn === $scope.players - 1) {
+        if ($scope.turn === $scope.players) {
             // to determine winner, decode w/ z = parseInt(result, 13);
             var i = 0,
                 max = 0,
@@ -322,6 +324,7 @@ app.controller('PokerController', function ($scope, $deck) {
             }
             $scope.df = true;
             $scope.nf = true;
+            $scope.sf = true;
             $scope.turn = player;
             $scope.hand = hands[player];
             $scope.hands = hands;
