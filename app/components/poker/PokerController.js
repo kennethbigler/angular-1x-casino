@@ -347,6 +347,7 @@ app.controller('PokerController', function ($scope, $deck) {
         }
         $scope.df = false;
         $scope.nf = false;
+        $scope.sf = false;
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
         $scope.hands = [];
