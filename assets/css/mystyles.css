@@ -48,10 +48,20 @@ header {
     display: inline;
     float: left;
 }
-
+.playing {
+    margin:  5px;
+    padding: 3px;
+    border-radius: 5px;
+    float: left;
+    font-weight: bold;
+    background-color: white;
+}
+.btn {
+    margin-bottom: 5px;
+}
 /***** Wording *****/
 .naration {
-    margin: 10px;
+    margin-bottom: 10px;
     color: white;
 }
 

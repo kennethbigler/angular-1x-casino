@@ -3,13 +3,14 @@
 app.controller('BlackjackController', function ($scope, $deck) {
     "use strict";
     // prepare data
-    $scope.players = 2;
+    var humans,
+        hands = [];
     $scope.turn = 0;
+    humans = 1;
+    $scope.ai = 6;
     
     // bet
-    // deal cards
-    $deck.shuffle();
-    $deck.deal(2);
+    // reveal cards
     // if dealer has 21, game over
     // if player has 21, game over
     // hit / stay / split / double down player
@@ -26,6 +27,31 @@ app.controller('BlackjackController', function ($scope, $deck) {
         // return payout
     // payout
     // new game
+    
+    
+    
+    // update ai and human players
+    $scope.updateAI = function (n) {
+        humans = n;
+        $scope.ai = 7 - n;
+        $('.btn-danger').removeClass('btn-danger');
+        $('#b' + n).addClass('btn-danger');
+    };
+    
+    $scope.newGame = function () {
+        var i;
+        $scope.turn = 0;
+        $deck.shuffle();
+        for (i = 0; i < (humans + $scope.ai); i += 1) {
+            hands[i] = $deck.deal(2);
+            hands[i].sort($deck.rankSort);
+        }
+        $scope.hands = hands;
+        $scope.hand = hands[$scope.turn];
+    };
+    
+    /******************************     Testing     ******************************/
+    $scope.newGame();
 });
 
 /* Player rules

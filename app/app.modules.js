@@ -84,4 +84,43 @@ var app = angular.module('myApp', ['ngRoute'])
                     deck = window.cards;
                 }*/
             };
-        });
+        })
+        .factory('$localstorage', ['$window', function ($window) {
+            'use strict';
+            return {
+                set: function (key, value) {
+                    $window.localStorage[key] = value;
+                },
+                get: function (key, defaultValue) {
+                    return $window.localStorage[key] || defaultValue;
+                },
+                putObject: function (key, value) {
+                    $window.localStorage[key] = JSON.stringify(value);
+                },
+                getObject: function (key) {
+                    return JSON.parse($window.localStorage[key] || '{}');
+                },
+                remove: function (key) {
+                    $window.localStorage.removeItem(key);
+                }
+            };
+        }])
+        .factory('$money', ['$localstorage', function ($localstorage) {
+            'use strict';
+            var savings = $localstorage.get('savings', 100);
+            return {
+                val: savings,
+                add: function (n) {
+                    this.val += n;
+                    $localstorage.set('savings', this.val);
+                },
+                sub: function (n) {
+                    this.val -= n;
+                    $localstorage.set('savings', this.val);
+                },
+                reset: function () {
+                    this.val = 100;
+                    $localstorage.remove('savings');
+                }
+            };
+        }]);

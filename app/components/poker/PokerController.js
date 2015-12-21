@@ -1,17 +1,19 @@
 /*global $, console, app, $scope */
 
-app.controller('PokerController', function ($scope, $deck) {
+app.controller('PokerController', ['$scope', '$deck', '$money', function ($scope, $deck, $money) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
-    var hands = [];
+    var humans,
+        hands = [];
     $scope.trash = [];
-    $scope.players = 2;
-    $scope.ai = 2;
+    humans = 1;
+    $scope.ai = 4;
     $scope.turn = 0;
     $scope.df = false;
     $scope.nf = false;
     $scope.sf = false;
+    $scope.tf = false;
     $scope.dropped = ["", "", "", "", ""];
     
     /******************************     Helper Functions     ******************************/
@@ -271,6 +273,14 @@ app.controller('PokerController', function ($scope, $deck) {
     }*/
     
     /******************************     View Functions     ******************************/
+    // update ai and human players
+    $scope.updateAI = function (n) {
+        humans = n;
+        $scope.ai = 5 - n;
+        $('.btn-danger').removeClass('btn-danger');
+        $('#b' + n).addClass('btn-danger');
+    };
+    
     // select cards to discard
     $scope.toss = function (t) {
         var i = $scope.trash.indexOf(t);
@@ -297,13 +307,13 @@ app.controller('PokerController', function ($scope, $deck) {
     $scope.nextHand = function () {
         $scope.sf = false;
         $scope.turn += 1;
-        if ($scope.turn === $scope.players) {
+        if ($scope.turn === humans) {
             // to determine winner, decode w/ z = parseInt(result, 13);
             var i = 0,
                 max = 0,
                 player = 0,
                 temp = 0;
-            for (i = 0; i < $scope.players; i += 1) {
+            for (i = 0; i < humans; i += 1) {
                 temp = evaluate(hands[i]);
                 console.log(temp);
                 temp = parseInt(temp, 13);
@@ -313,13 +323,13 @@ app.controller('PokerController', function ($scope, $deck) {
                 }
             }
             for (i = 0; i < $scope.ai; i += 1) {
-                temp = computer(hands[i + $scope.players]);
+                temp = computer(hands[i + humans]);
                 $scope.turn += 1;
                 console.log(temp);
                 temp = parseInt(temp, 13);
                 if (temp > max) {
                     max = temp;
-                    player = i + $scope.players;
+                    player = i + humans;
                 }
             }
             $scope.df = true;
@@ -328,10 +338,18 @@ app.controller('PokerController', function ($scope, $deck) {
             $scope.turn = player;
             $scope.hand = hands[player];
             $scope.hands = hands;
+            if (player === 0) {
+                $money.add(40);
+                //variable bets
+            } else {
+                $money.sub(10);
+                //variable bets
+            }
         } else {
             $scope.df = false;
             $scope.hand = hands[$scope.turn];
         }
+        $scope.tf = true;
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
     };
@@ -341,13 +359,14 @@ app.controller('PokerController', function ($scope, $deck) {
         var i;
         $scope.turn = 0;
         $deck.shuffle();
-        for (i = 0; i < ($scope.players + $scope.ai); i += 1) {
+        for (i = 0; i < (humans + $scope.ai); i += 1) {
             hands[i] = $deck.deal(5);
             hands[i].sort($deck.rankSort);
         }
         $scope.df = false;
         $scope.nf = false;
         $scope.sf = false;
+        $scope.tf = false;
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
         $scope.hands = [];
@@ -356,4 +375,4 @@ app.controller('PokerController', function ($scope, $deck) {
     
     /******************************     Testing     ******************************/
     $scope.newGame();
-});
+}]);
