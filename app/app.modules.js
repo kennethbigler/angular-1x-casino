@@ -111,11 +111,11 @@ var app = angular.module('myApp', ['ngRoute'])
             return {
                 val: savings,
                 add: function (n) {
-                    this.val += n;
+                    this.val += parseInt(n, 10);
                     $localstorage.set('savings', this.val);
                 },
                 sub: function (n) {
-                    this.val -= n;
+                    this.val -= parseInt(n, 10);
                     $localstorage.set('savings', this.val);
                 },
                 reset: function () {

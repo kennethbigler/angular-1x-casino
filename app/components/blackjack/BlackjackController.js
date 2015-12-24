@@ -3,16 +3,35 @@
 app.controller('BlackjackController', function ($scope, $deck) {
     "use strict";
     // prepare data
-    var humans,
+    var humans = 1,
+        bet = 5,
         hands = [];
     $scope.turn = 0;
-    humans = 1;
     $scope.ai = 6;
     
+    /********************     Gameplay Functions     ********************/
     // bet
+    $scope.setBet = function (n) {
+        bet += parseInt(n, 10);
+    };
     // reveal cards
     // if dealer has 21, game over
     // if player has 21, game over
+    $scope.blackjack = function () {
+        var i,
+            bjs = [];
+        for (i = 0; i <= hands.length; i += 1) {
+            if (hands[i][0].rank === 14 || hands[i][1].rank === 14) && (10 <= hands[i][0].rank <= 13 || 10 <= hands[i][1].rank <= 13) {
+                bjs.push(i);
+            }
+            
+            for (i = 0; i < bjs.length; i += 1) {
+                if (bjs.pop === 6) {
+                    // flag dealer has bj
+                } else (bjs.pop)
+            }
+        }
+    }
     // hit / stay / split / double down player
     // bust ends
     // else, hit or stay
@@ -27,17 +46,6 @@ app.controller('BlackjackController', function ($scope, $deck) {
         // return payout
     // payout
     // new game
-    
-    
-    
-    // update ai and human players
-    $scope.updateAI = function (n) {
-        humans = n;
-        $scope.ai = 7 - n;
-        $('.btn-danger').removeClass('btn-danger');
-        $('#b' + n).addClass('btn-danger');
-    };
-    
     $scope.newGame = function () {
         var i;
         $scope.turn = 0;
@@ -50,11 +58,19 @@ app.controller('BlackjackController', function ($scope, $deck) {
         $scope.hand = hands[$scope.turn];
     };
     
-    /******************************     Testing     ******************************/
+    /********************     UI Functions     ********************/
+    // update ai and human players
+    $scope.updateAI = function (n) {
+        humans = n;
+        $scope.ai = 7 - n;
+        $('.btn-danger').removeClass('btn-danger');
+        $('#b' + n).addClass('btn-danger');
+    };
+    /********************     Testing Code     ********************/
     $scope.newGame();
 });
 
-/* Player rules
+/* Computer Algorithm
 https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
 
 Blackjack
