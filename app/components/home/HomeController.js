@@ -1,10 +1,10 @@
 /*global $, console, app, $scope, $location*/
 
-app.controller('HomeController', ['$scope', '$location', '$money', function ($scope, $location, $money) {
+app.controller('HomeController', ['$scope', '$location', '$storage', function ($scope, $location, $storage) {
     "use strict";
     
     // get global money
-    $scope.money = $money;
+    $scope.savings = $storage.savings[0];
     
     // set a tab as the active tab
     $scope.getClass = function (path) {

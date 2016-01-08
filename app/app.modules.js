@@ -105,22 +105,44 @@ var app = angular.module('myApp', ['ngRoute'])
                 }
             };
         }])
-        .factory('$money', ['$localstorage', function ($localstorage) {
+        .factory('$storage', ['$localstorage', function ($localstorage) {
             'use strict';
-            var savings = $localstorage.get('savings', 100);
+            var savings = $localstorage.getObject('savings'),
+                names = $localstorage.getObject('names');
+            // if no game data, fill with default
+            if (savings === '{}') {
+                savings = [100, 100, 100, 100, 100, 100];
+            } else if (names === '{}') {
+                names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
+            }
             return {
-                val: savings,
-                add: function (n) {
-                    this.val += parseInt(n, 10);
-                    $localstorage.set('savings', this.val);
+                savings: savings,
+                names: names,
+                add: function (n, p) {
+                    this.savings[p] += parseInt(n, 10);
+                    $localstorage.putObject('savings', this.savings);
                 },
-                sub: function (n) {
-                    this.val -= parseInt(n, 10);
-                    $localstorage.set('savings', this.val);
+                sub: function (n, p) {
+                    this.savings[p] -= parseInt(n, 10);
+                    $localstorage.putObject('savings', this.savings);
+                },
+                name: function (n, p) {
+                    this.names[p] = n;
+                    $localstorage.putObject('names', this.names);
+                },
+                resetSavings: function () {
+                    this.savings = [100, 100, 100, 100, 100, 100];
+                    $localstorage.remove('savings');
+                },
+                resetNames: function () {
+                    this.names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
+                    $localstorage.remove('names');
                 },
                 reset: function () {
-                    this.val = 100;
+                    this.savings = [100, 100, 100, 100, 100, 100];
+                    this.names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
                     $localstorage.remove('savings');
+                    $localstorage.remove('names');
                 }
             };
         }]);

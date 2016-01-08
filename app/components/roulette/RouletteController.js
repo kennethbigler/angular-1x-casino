@@ -2,7 +2,6 @@
 
 app.controller('RouletteController', function ($scope, $deck) {
     "use strict";
-    $deck.shuffle();
     // place bets
     // spin wheel
     // evaluate
@@ -26,7 +25,7 @@ Outside Bets:
     These are bets made that do not involve specific numbers
     You can bet a red or a black number will win (color bet) (pays 1 to 1)
     You can bet the number will be odd or even (even/odd bet) (pays 1 to 1)
-    You can bet the number will be high 19 to 36 or low 18 or less (high low bet) (pays 1 to 1)
+    You can bet the number will be high (19-36) or low (x <= 18) (high low bet) (pays 1 to 1)
     You can bet on any of the three columns (column bet) (pays 2 to 1)
     The 36 numbers have been broken up into 3 dozens: first dozen, second dozen, and third dozen (dozen bet) (pays 2 to 1)
     

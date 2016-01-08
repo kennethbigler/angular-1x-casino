@@ -1,6 +1,6 @@
 /*global $, console, app, $scope */
 
-app.controller('BlackjackController', function ($scope, $deck) {
+app.controller('BlackjackController', ['$scope', '$deck', '$storage', function ($scope, $deck, $storage) {
     "use strict";
     // prepare data
     var humans = 1,
@@ -9,7 +9,15 @@ app.controller('BlackjackController', function ($scope, $deck) {
     $scope.turn = 0;
     $scope.ai = 5;
     
-    /********************     Gameplay Functions     ********************/
+    /********************     Gameplay Helper Functions     ********************/
+    function isBlackjack(n) {
+        if ((hands[n][0].rank === 14 || hands[n][1].rank === 14) && (10 <= hands[n][0].rank <= 13 || 10 <= hands[n][1].rank <= 13)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    /********************     Gameplay Helper Functions     ********************/
     // bet
     $scope.setBet = function (n) {
         bet += parseInt(n, 10);
@@ -17,18 +25,23 @@ app.controller('BlackjackController', function ($scope, $deck) {
     // reveal cards
     // if dealer has 21, game over
     // if player has 21, game over
-    $scope.blackjack = function () {
-        var i,
-            bjs = [];
-        for (i = 0; i <= hands.length; i += 1) {
-            if ((hands[i][0].rank === 14 || hands[i][1].rank === 14) && (10 <= hands[i][0].rank <= 13 || 10 <= hands[i][1].rank <= 13)) {
-                bjs.push(i);
-            }
-            
-            for (i = 0; i < bjs.length; i += 1) {
-                if (bjs.pop === 6) {
-                    // flag dealer has bj
-                } else {bjs.pop(); }
+    
+    /* todo list:
+     * make the dealers hand a separate variable
+     * change ui so that it is dealer and 6 players
+     * enable betting for 6 players, not just 1
+     */
+    
+    $scope.checkBlackjack = function () {
+        var i;
+        if (isBlackjack(hands.length - 1)) {
+            for (i = 0; i < hands.length - 1; i += 1) {
+                if (isBlackjack(i)) {
+                    // do nothing
+                    continue;
+                } else {
+                    
+                }
             }
         }
     };
@@ -68,7 +81,7 @@ app.controller('BlackjackController', function ($scope, $deck) {
     };
     /********************     Testing Code     ********************/
     $scope.newGame();
-});
+}]);
 
 /* Computer Algorithm
 https://www.blackjackinfo.com/blackjack-basic-strategy-engine/

@@ -1,6 +1,6 @@
 /*global $, console, app, $scope */
 
-app.controller('PokerController', ['$scope', '$deck', '$money', function ($scope, $deck, $money) {
+app.controller('PokerController', ['$scope', '$deck', '$storage', function ($scope, $deck, $storage) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
@@ -339,10 +339,10 @@ app.controller('PokerController', ['$scope', '$deck', '$money', function ($scope
             $scope.hand = hands[player];
             $scope.hands = hands;
             if (player === 0) {
-                $money.add(40);
+                $storage.add(40, 0);
                 //variable bets
             } else {
-                $money.sub(10);
+                $storage.sub(40, 0);
                 //variable bets
             }
         } else {
