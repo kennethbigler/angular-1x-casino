@@ -7,7 +7,7 @@ app.controller('BlackjackController', function ($scope, $deck) {
         bet = 5,
         hands = [];
     $scope.turn = 0;
-    $scope.ai = 6;
+    $scope.ai = 5;
     
     /********************     Gameplay Functions     ********************/
     // bet
@@ -21,17 +21,17 @@ app.controller('BlackjackController', function ($scope, $deck) {
         var i,
             bjs = [];
         for (i = 0; i <= hands.length; i += 1) {
-            if (hands[i][0].rank === 14 || hands[i][1].rank === 14) && (10 <= hands[i][0].rank <= 13 || 10 <= hands[i][1].rank <= 13) {
+            if ((hands[i][0].rank === 14 || hands[i][1].rank === 14) && (10 <= hands[i][0].rank <= 13 || 10 <= hands[i][1].rank <= 13)) {
                 bjs.push(i);
             }
             
             for (i = 0; i < bjs.length; i += 1) {
                 if (bjs.pop === 6) {
                     // flag dealer has bj
-                } else (bjs.pop)
+                } else {bjs.pop(); }
             }
         }
-    }
+    };
     // hit / stay / split / double down player
     // bust ends
     // else, hit or stay
@@ -62,7 +62,7 @@ app.controller('BlackjackController', function ($scope, $deck) {
     // update ai and human players
     $scope.updateAI = function (n) {
         humans = n;
-        $scope.ai = 7 - n;
+        $scope.ai = 6 - n;
         $('.btn-danger').removeClass('btn-danger');
         $('#b' + n).addClass('btn-danger');
     };
