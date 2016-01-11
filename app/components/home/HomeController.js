@@ -4,7 +4,7 @@ app.controller('HomeController', ['$scope', '$location', '$storage', function ($
     "use strict";
     
     // get global money
-    $scope.savings = $storage.savings[0];
+    $scope.storage = $storage;
     
     // set a tab as the active tab
     $scope.getClass = function (path) {

@@ -12,14 +12,15 @@
                     <a id="b3" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(3)">3</a>
                     <a id="b4" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(4)">4</a>
                     <a id="b5" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(5)">5</a>
+                    <a id="b5" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(6)">6</a>
                 </div>
                 <div class="col-sm-2">
                     <h2 class="naration">AI: {{ ai }}</h2>
                 </div>
                 <div class="col-sm-12">
                     <hr />
-                    <h2 class="naration">Player {{ turn + 1 }}<span> Wins!</span></h2>
-                    <div ng-repeat="card in hand track by $index" class="playingCard handc" ng-class="dropped[$index]" ng-style='card.color' ng-click="toss($index)">
+                    <h2 class="naration">Dealer</h2>
+                    <div ng-repeat="card in dealer track by $index" class="playingCard handc" ng-class="dropped[$index]" ng-style='card.color' ng-click="toss($index)">
                         {{ card.name }}
                         <h2 class="suit">{{ card.suit }}</h2>
                     </div>
@@ -39,8 +40,10 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="discard()">Discard</a>
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="nextHand()">Next Player</a>
+            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="hit()">Hit</a>
+            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="stay()">Stay</a>
+            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="split()">Split</a>
+            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="doubledown()">Double Down</a>
             <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="newGame()">New Game</a>
         </div>
     </div>

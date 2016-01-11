@@ -342,7 +342,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', function ($sco
                 $storage.add(40, 0);
                 //variable bets
             } else {
-                $storage.sub(40, 0);
+                $storage.sub(10, 0);
                 //variable bets
             }
         } else {

@@ -1,13 +1,15 @@
-/*global $, console, app, $scope */
+/*global $, console, app, continue, $scope */
 
 app.controller('BlackjackController', ['$scope', '$deck', '$storage', function ($scope, $deck, $storage) {
     "use strict";
     // prepare data
     var humans = 1,
-        bet = 5,
+        bet = [5, 5, 5, 5, 5, 5],
         hands = [];
     $scope.turn = 0;
     $scope.ai = 5;
+    $scope.hand = [];
+    $scope.dealer = [];
     
     /********************     Gameplay Helper Functions     ********************/
     function isBlackjack(n) {
@@ -22,42 +24,55 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     $scope.setBet = function (n) {
         bet += parseInt(n, 10);
     };
+    
     // reveal cards
     // if dealer has 21, game over
     // if player has 21, game over
-    
-    /* todo list:
-     * make the dealers hand a separate variable
-     * change ui so that it is dealer and 6 players
-     * enable betting for 6 players, not just 1
-     */
-    
     $scope.checkBlackjack = function () {
         var i;
-        if (isBlackjack(hands.length - 1)) {
-            for (i = 0; i < hands.length - 1; i += 1) {
-                if (isBlackjack(i)) {
-                    // do nothing
-                    continue;
-                } else {
-                    
+        if (isBlackjack($scope.dealer)) {
+            for (i = 0; i < hands.length; i += 1) {
+                if (!isBlackjack(i)) {
+                    $storage.sub(bet[i], i);
                 }
+                // if blackjack, do nothing
+            }
+        } else {
+            for (i = 0; i < hands.length; i += 1) {
+                if (isBlackjack(i)) {
+                    $storage.add(1.5 * bet[i], i);
+                }
+                // if not blackjack, do nothing
             }
         }
     };
     // hit / stay / split / double down player
-    // bust ends
-    // else, hit or stay
-    // next player
-        // repeat
-    // dealer
-    // hit or stay
-    // bust pays players left
-    // evaluate
-        // check for special conditions
-        // check for higher score <= 21
-        // return payout
-    // payout
+    $scope.hit = function () {
+        console.log("hit");
+    };
+    $scope.stay = function () {
+        console.log("stay");
+    };
+    $scope.split = function () {
+        console.log("split");
+    };
+    $scope.doubledown = function () {
+        console.log("doubledown");
+    };
+    // Dealer hits on 16 or less and soft 17
+    // Dealer bust pays players left
+    $scope.playAI = function () {
+        
+    };
+    /* Evaluate Play of the Game
+     * check dealer score
+     * check player score, compare to dealer score
+     * check for special conditions
+     * payout to players
+    */
+    function evaluate() {
+        
+    }
     // new game
     $scope.newGame = function () {
         var i;
@@ -67,6 +82,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             hands[i] = $deck.deal(2);
             hands[i].sort($deck.rankSort);
         }
+        $scope.dealer = $deck.deal(2);
         $scope.hands = hands;
         $scope.hand = hands[$scope.turn];
     };

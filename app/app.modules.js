@@ -110,11 +110,14 @@ var app = angular.module('myApp', ['ngRoute'])
             var savings = $localstorage.getObject('savings'),
                 names = $localstorage.getObject('names');
             // if no game data, fill with default
-            if (savings === '{}') {
+            if (Object.keys(savings).length === 0) {
                 savings = [100, 100, 100, 100, 100, 100];
-            } else if (names === '{}') {
+            }
+            if (Object.keys(names).length === 0) {
                 names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
             }
+            console.log(savings);
+            console.log(names);
             return {
                 savings: savings,
                 names: names,
@@ -143,6 +146,7 @@ var app = angular.module('myApp', ['ngRoute'])
                     this.names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
                     $localstorage.remove('savings');
                     $localstorage.remove('names');
+                    console.log("reset");
                 }
             };
         }]);
