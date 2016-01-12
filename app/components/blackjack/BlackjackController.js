@@ -27,7 +27,12 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 soft = true;
             } else if (value > 10 && hand[i].rank === 14) {
                 value += 1;
-            } else if (value > 21 && soft) {
+            } else {
+                // error logging
+                console.log("Something went wrong with weight - rank: " + hand[i].rank + " val: " + value);
+            }
+            // check for soft "busts"
+            if (value > 21 && soft) {
                 value -= 10;
                 soft = false;
             }
@@ -51,8 +56,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     /* Evaluate Play of the Game
      * check dealer score
      * check player score, compare to dealer score
-     * check for special conditions
-     * payout to players
+     * payout to players and house
     */
     function evaluate() {
         var i, temp, dealer = weight($scope.dealer);
