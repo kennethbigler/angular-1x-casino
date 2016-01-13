@@ -40,11 +40,50 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="hit()">Hit</a>
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="stay()">Stay</a>
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="split()">Split</a>
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="doubledown()">Double Down</a>
-            <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="newGame()">New Game</a>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-click="hit()">Hit</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-click="stay()">Stay</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-click="split()">Split</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-click="doubledown()">Double Down</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-click="newGame()">New Game</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="modal" data-target="#rules">Open Modal</button>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="rules" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Blackjack Rules</h3>
+                </div>
+                <div class="modal-body">
+                    <h4>Objective:</h4>
+                    <p>Get as close to 21 as you can, without going over. Each card is worth it's number, J/Q/K are worth 10, and an Ace is worth 11 unless you go over 21, then it is worth 1.</p>
+                    <h4>Blackjack:</h4>
+                    <p>Delt an Ace and a 10/J/Q/K, this casino pays 3:2, but Vegas casinos do 6:5.</p>
+                    <h4>Hit:</h4>
+                    <p>Get an extra card which adds to your total.</p>
+                    <h4>Stay:</h4>
+                    <p>Move to the next player.</p>
+                    <h4>Double Down:</h4>
+                    <p>This option is available with a two card hand; before another card has been drawn double your bet and receive one (and only one) additional card to your hand. Play then moves to the next player.</p>
+                    <h4>Splitting Pairs:</h4>
+                    <p>When you are dealt a pair of cards of the same rank, you are allowed to split into two separate hands and play them independently. You will match your bet for the second hand. A double after a split is ok</p>
+                    <h4>Resplitting:</h4>
+                    <p>When you get additional pairs in the first two cards of a hand you can resplit. Typically a player is allowed to split up to 3 times (delt 4 of a kind).</p>
+                    <h4>Splitting Aces:</h4>
+                    <p>Player is limited to drawing only one additional card on each Ace. If you draw a ten-valued card on one of your split Aces, the hand is not considered a Blackjack (it is treated as a normal 21). You can re-split Aces.</p>
+                    <h4>Other Rules:</h4>
+                    <ul>
+                        <li>Dealer hits on 16 or less and soft 17</li>
+                        <li>Minimum bet is $5</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -10,8 +10,13 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         soft = false;
     $scope.turn = 0;
     $scope.ai = 5;
-    $scope.hand = [];
+    $scope.hands = [];
     $scope.dealer = [];
+    // buttons, hit, double, stay
+    $scope.b = false;
+    $scope.h = false;
+    $scope.d = false;
+    $scope.s = false;
     
 /********************     Gameplay Helper Functions     ********************/
     function weight(hand) {
@@ -72,7 +77,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             d = $scope.dealer[0].rank;
         while (n < 22) {
             if (x === y) {
-                
+                // write split algorithm
+                $scope.split();
             }
             if (n < 20 && soft) {
                 // soft hands, A9+ stays
@@ -215,6 +221,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 }
             }
         }
+        $scope.b = false;
     }
     
 /********************     Gameplay Functions     ********************/
@@ -229,6 +236,13 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     $scope.hit = function () {
         console.log("hit");
         hands[$scope.turn].push($deck.deal(1)[0]);
+        // cannot hit on 21 or over
+        if (weight(hands[$scope.turn]) >= 21) {
+            $scope.h = false;
+        }
+        $scope.b = false;
+        $scope.s = false;
+        // hide double and split
     };
     // switches to the next players turn
     $scope.stay = function () {
@@ -245,11 +259,22 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             }
         }
         // clear any flags set earlier
+        $scope.h = true;
+        $scope.d = true;
+        // check for split and show button if yes
+        $scope.s = true;
+        
+        // check if last human
+        // play ai
+        // evaluate
+        // display end
     };
     // takes 1 hand of doubles, and turns it into 2 hands, duplicates bet
     $scope.split = function () {
         console.log("split");
         // track this hand to the bet of the player who split somehow
+        // splice into the +1 spot in hand, names, bet, etc.
+        // set counter to count how many of these are done, then undo it later
         hands[$scope.turn + 6] = [hands[$scope.turn].pop(), $deck.deal(1)[0]];
         hands[$scope.turn].push($deck.deal(1)[0]);
         // cannot hit after splitting aces
@@ -257,6 +282,11 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         if (hands[$scope.turn][0].rank === 14) {
             $scope.stay();
         }
+        $scope.h = true;
+        $scope.d = true;
+        // check for split and show button if yes
+        $scope.s = true;
+        // double and split are allowed after a split
     };
     // double bet and get only 1 card
     $scope.double = function () {
@@ -266,10 +296,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         $scope.stay();
     };
     
-    // Start Game
-    $scope.startGame = function () {
-        
-    };
     // new game
     $scope.newGame = function () {
         var i;
@@ -281,23 +307,26 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         }
         $scope.dealer = $deck.deal(2);
         $scope.hands = hands;
-        $scope.hand = hands[$scope.turn];
-        
-        
-        // cannot hit on 21 or over
-        if (weight(hands[i]) >= 21) {
+        checkBlackjack();
+        // skip beginning hand w/ 21
+        if (weight(hands[0]) === 21) {
+            // skip play of blackjacks
             $scope.stay();
         }
+        soft = false;
+        $scope.b = false;
+    };
+
+    $scope.startGame = function () {
+        $scope.b = true;
+        $scope.h = true;
+        $scope.d = true;
+        // check for split and show button if yes
+        $scope.s = true;
+        // show bets & # players, no hands & game buttons
+        // hide bets & # players show hands & game buttons
     };
     
-    // show bets & # players, no hands & game buttons
-    // hide bets & # players show hands & game buttons
-    // game buttons:
-    // if bj, turn will be skipped, need to skip first bj if there
-    // show hit, double, stay (maybe split)
-    // after first hit, hide double and split
-    // if bust, hide all but stay
-    // on stay start from line 3
 /********************     UI Functions     ********************/
     // update ai and human players
     $scope.updateAI = function (n) {
@@ -312,29 +341,4 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
 
 /* Computer Algorithm
 https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
-
-Blackjack
-    Delt a A and a 10, should pay 3:2, but most casinos do 6:5
-
-Double Down:
-    This option is available with a two card hand, before another card has been drawn
-    double your bet and receive one (and only one) additional card to your hand
-
-Splitting Pairs
-    When you are dealt a pair of cards of the same rank
-    allowed to split into two separate hands and play them independently
-    Double after split is ok
-    
-Resplitting
-    When you get additional pairs in the first two cards of a hand you can resplit
-    Typically a player is allowed to split up to 3 times (delt 4 of a kind)
-    
-Splitting Aces
-    Player is limited to drawing only one additional card on each Ace
-    If you draw a ten-valued card on one of your split Aces, the hand is not considered a Blackjack (treated as a normal 21)
-    Can re-split aces
-    
-
-Dealer hits on 16 or less and soft 17
-Minimum bet is $5
 */
