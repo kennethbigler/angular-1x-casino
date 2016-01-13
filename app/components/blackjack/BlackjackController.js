@@ -66,9 +66,14 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         }
     }
     function playBot() {
-        var n = weight(hands[$scope.turn]),
+        var x = hands[$scope.turn][0].rank,
+            y = hands[$scope.turn][1].rank,
+            n = weight(hands[$scope.turn]),
             d = $scope.dealer[0].rank;
         while (n < 22) {
+            if (x === y) {
+                
+            }
             if (n < 20 && soft) {
                 // soft hands, A9+ stays
                 if (13 <= n <= 14) {
