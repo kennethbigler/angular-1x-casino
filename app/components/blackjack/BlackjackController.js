@@ -6,17 +6,17 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     // prepare data
     var humans = 1,
         bet = [5, 5, 5, 5, 5, 5],
-        hands = [];
+        hands = [],
+        soft = false;
     $scope.turn = 0;
     $scope.ai = 5;
     $scope.hand = [];
     $scope.dealer = [];
     
-    /********************     Gameplay Helper Functions     ********************/
+/********************     Gameplay Helper Functions     ********************/
     function weight(hand) {
         var i = 0,
-            value = 0,
-            soft = false;
+            value = 0;
         for (i = 0; i < hand.length; i += 1) {
             if (10 <= hand[i].rank <= 13) {
                 value += 10;
@@ -29,7 +29,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 value += 1;
             } else {
                 // error logging
-                console.log("Something went wrong with weight - rank: " + hand[i].rank + " val: " + value);
+                console.log("Weight Error: rank " + hand[i].rank + ", val " + value);
             }
             // check for soft "busts"
             if (value > 21 && soft) {
@@ -39,61 +39,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         }
         return value;
     }
-    
-    function nextPlayer() {
-        var i;
-        $scope.turn += 1;
-        for (i = $scope.turn; i < hands.length; i += 1) {
-            if (weight(hands[i]) === 21) {
-                $scope.turn += 1;
-            } else {
-                return;
-            }
-        }
-        // clear any flags set earlier
-    }
-    
-    /* Evaluate Play of the Game
-     * check dealer score
-     * check player score, compare to dealer score
-     * payout to players and house
-    */
-    function evaluate() {
-        var i, temp, dealer = weight($scope.dealer);
-        // skip blackjacks but not earned 21s
-        if (dealer >= 21) {
-            for (i = 0; i < hands.length; i += 1) {
-                if (weight(hands[i]) <= 21) {
-                    $storage.add(bet[i], i);
-                } else {
-                    $storage.sub(bet[i], i);
-                }
-            }
-        } else {
-            for (i = 0; i < hands.length; i += 1) {
-                temp = weight(hands[i]);
-                if (temp > dealer && temp < 22) {
-                    $storage.add(bet[i], i);
-                } else if (temp === dealer) {
-                    // do nothing
-                    continue;
-                } else {
-                    $storage.sub(bet[i], i);
-                }
-            }
-        }
-    }
-    
-    /********************     Gameplay Helper Functions     ********************/
-    // bet
-    $scope.setBet = function (n) {
-        bet += parseInt(n, 10);
-    };
-    
-    // reveal cards
-    // if dealer has 21, game over
-    // if player has 21, game over
-    $scope.checkBlackjack = function () {
+    function checkBlackjack() {
         var i;
         if (weight($scope.dealer) === 21) {
             for (i = 0; i < hands.length; i += 1) {
@@ -110,37 +56,213 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 // if not blackjack, do nothing
             }
         }
+    }
+    // Dealer hits on 16 or less and soft 17
+    function playDealer() {
+        var n = weight($scope.dealer);
+        while ((n < 17) || (n === 17 && soft)) {
+            $scope.dealer.push($deck.deal(1)[0]);
+            n = weight($scope.dealer);
+        }
+    }
+    function playBot() {
+        var n = weight(hands[$scope.turn]),
+            d = $scope.dealer[0].rank;
+        while (n < 22) {
+            if (n < 20 && soft) {
+                // soft hands, A9+ stays
+                if (13 <= n <= 14) {
+                    // A2-A3 double d5-6, hit d2-4, d7-A
+                    if (5 <= n <= 6) {
+                        $scope.double();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (15 <= n <= 16) {
+                    // A4-A5 double d4-6, hit d2-3, d7-A
+                    if (4 <= d <= 6) {
+                        $scope.double();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (n === 17) {
+                    // A6 double d3-6, hit d2, d7-A
+                    if (3 <= d <= 6) {
+                        $scope.double();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (n === 18) {
+                    // A7 double d2-6, stay d7-8, hit d9-A
+                    if (2 <= n <= 6) {
+                        $scope.double();
+                        return;
+                    } else if (7 <= n <= 8) {
+                        $scope.stay();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (n === 19) {
+                    // A8 double d6, else stay
+                    if (d === 6) {
+                        $scope.double();
+                        return;
+                    } else {
+                        $scope.stay();
+                        return;
+                    }
+                } else {
+                    console.log("AI Error: n " + n + ", d " + d + ", s " + soft);
+                    $scope.stay();
+                    return;
+                }
+            } else if (n < 17 && !soft) {
+                // hard hands, 17+ stays
+                if (5 <= n <= 8) {
+                    // 5-8 hit
+                    $scope.hit();
+                } else if (n === 9) {
+                    // 9 double d3-6, hit d2, d7-A
+                    if (3 <= d <= 6) {
+                        $scope.double();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (n === 10) {
+                    // 10 double d2-9, hit d10-A
+                    if (2 <= d <= 9) {
+                        $scope.double();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (n === 11) {
+                    // 11 double
+                    $scope.double();
+                    return;
+                } else if (n === 12) {
+                    // 12 hit d2-3, stay d4-6, hit 7-A
+                    if (4 <= d <= 6) {
+                        $scope.stay();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else if (13 <= n <= 16) {
+                    // 13-16 stay d2-6, hit 7-A
+                    if (2 <= d <= 6) {
+                        $scope.stay();
+                        return;
+                    } else {
+                        $scope.hit();
+                    }
+                } else {
+                    console.log("AI Error: n " + n + ", d " + d + ", s " + soft);
+                    $scope.stay();
+                    return;
+                }
+            } else {
+                console.log("AI: n " + n + ", d " + d + ", s " + soft);
+                return;
+            }
+            n = weight(hands[$scope.turn]);
+        }
+        console.log("bust");
+        $scope.stay();
+        return;
+    }
+    /* Evaluate Play of the Game
+     * check dealer score
+     * check player score, compare to dealer score
+     * payout to players and house
+    */
+    function evaluate() {
+        var i, temp, dealer = weight($scope.dealer);
+        // dealer bust
+        if (dealer > 21) {
+            for (i = 0; i < hands.length; i += 1) {
+                temp = weight(hands[i]);
+                // skip blackjacks but not earned 21s
+                if (temp === 21 && hands[i].length === 2) {
+                    continue;
+                } else if (weight(hands[i]) <= 21) {
+                    $storage.add(bet[i], i);
+                } else {
+                    $storage.sub(bet[i], i);
+                }
+            }
+        } else {
+            for (i = 0; i < hands.length; i += 1) {
+                temp = weight(hands[i]);
+                if (temp === 21 && hands[i].length === 2) {
+                    continue;
+                } else if (temp > dealer && temp < 22) {
+                    $storage.add(bet[i], i);
+                } else if (temp === dealer) {
+                    continue;
+                } else {
+                    $storage.sub(bet[i], i);
+                }
+            }
+        }
+    }
+    
+/********************     Gameplay Functions     ********************/
+    // modify bet
+    $scope.setBet = function (n, p) {
+        bet[p] += parseInt(n, 10);
+        if (bet[p] < 5) {
+            bet[p] = 5;
+        }
     };
-    // hit / stay / split / double down player
-    $scope.hit = function (p) {
+    // player gets an extra card, forced to stay on x >= 21
+    $scope.hit = function () {
         console.log("hit");
-        hands[p].push($deck.deal(1)[0]);
-        // check for 21
-        // check for 22+
-        // set flags accordingly
+        hands[$scope.turn].push($deck.deal(1)[0]);
     };
+    // switches to the next players turn
     $scope.stay = function () {
         console.log("stay");
-        nextPlayer();
-    };
-    $scope.split = function (p) {
-        console.log("split");
-        if (hands[p][0].rank === 14) {
-            nextPlayer();
+        var i;
+        soft = false;
+        $scope.turn += 1;
+        for (i = $scope.turn; i < hands.length; i += 1) {
+            if (weight(hands[i]) === 21) {
+                // skip play of blackjacks
+                $scope.turn += 1;
+            } else {
+                return;
+            }
         }
+        // clear any flags set earlier
+    };
+    // takes 1 hand of doubles, and turns it into 2 hands, duplicates bet
+    $scope.split = function () {
+        console.log("split");
         // track this hand to the bet of the player who split somehow
-        hands.push([hands[p].pop(), $deck.deal(1)[0]]);
-        hands[p].push($deck.deal(1)[0]);
+        hands[$scope.turn + 6] = [hands[$scope.turn].pop(), $deck.deal(1)[0]];
+        hands[$scope.turn].push($deck.deal(1)[0]);
+        // cannot hit after splitting aces
+        // make it so that the hands split and the cards are face down
+        if (hands[$scope.turn][0].rank === 14) {
+            $scope.stay();
+        }
     };
-    $scope.doubledown = function (p) {
-        console.log("doubledown");
-        bet[p] *= 2;
-        hands[p].push($deck.deal(1)[0]);
-        nextPlayer();
+    // double bet and get only 1 card
+    $scope.double = function () {
+        console.log("double");
+        bet[$scope.turn] *= 2;
+        hands[$scope.turn].push($deck.deal(1)[0]);
+        $scope.stay();
     };
-    // Dealer hits on 16 or less and soft 17
-    // Dealer bust pays players left
-    $scope.playAI = function () {
+    
+    // Start Game
+    $scope.startGame = function () {
         
     };
     // new game
@@ -155,9 +277,23 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         $scope.dealer = $deck.deal(2);
         $scope.hands = hands;
         $scope.hand = hands[$scope.turn];
+        
+        
+        // cannot hit on 21 or over
+        if (weight(hands[i]) >= 21) {
+            $scope.stay();
+        }
     };
     
-    /********************     UI Functions     ********************/
+    // show bets & # players, no hands & game buttons
+    // hide bets & # players show hands & game buttons
+    // game buttons:
+    // if bj, turn will be skipped, need to skip first bj if there
+    // show hit, double, stay (maybe split)
+    // after first hit, hide double and split
+    // if bust, hide all but stay
+    // on stay start from line 3
+/********************     UI Functions     ********************/
     // update ai and human players
     $scope.updateAI = function (n) {
         humans = n;
@@ -165,7 +301,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         $('.btn-danger').removeClass('btn-danger');
         $('#b' + n).addClass('btn-danger');
     };
-    /********************     Testing Code     ********************/
+/********************     Testing Code     ********************/
     $scope.newGame();
 }]);
 
