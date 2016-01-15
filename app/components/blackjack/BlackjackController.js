@@ -21,20 +21,22 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
 /********************     Gameplay Helper Functions     ********************/
     function weight(hand) {
         var i = 0,
-            value = 0;
+            value = 0,
+            temp = 0;
         for (i = 0; i < hand.length; i += 1) {
-            if (10 <= hand[i].rank <= 13) {
+            temp = hand[i].rank;
+            if (temp >= 10 && temp <= 13) {
                 value += 10;
-            } else if (hand[i].rank < 10) {
-                value += hand[i].rank;
-            } else if (value <= 10 && hand[i].rank === 14) {
+            } else if (temp < 10) {
+                value += temp;
+            } else if (value <= 10 && temp === 14) {
                 value += 11;
                 soft = true;
-            } else if (value > 10 && hand[i].rank === 14) {
+            } else if (value > 10 && temp === 14) {
                 value += 1;
             } else {
                 // error logging
-                console.log("Weight Error: rank " + hand[i].rank + ", val " + value);
+                console.log("Weight Error: rank " + temp + ", val " + value);
             }
             // check for soft "busts"
             if (value > 21 && soft) {
@@ -85,17 +87,17 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             }
             if (n < 20 && soft) {
                 // soft hands, A9+ stays
-                if (13 <= n <= 14) {
+                if (n === 13 || n === 14) {
                     // A2-A3 double d5-6, hit d2-4, d7-A
-                    if (5 <= n <= 6) {
+                    if (d === 5 || d === 6) {
                         $scope.double();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (15 <= n <= 16) {
+                } else if (n === 15 || n === 16) {
                     // A4-A5 double d4-6, hit d2-3, d7-A
-                    if (4 <= d <= 6) {
+                    if (d >= 4 && d <= 6) {
                         $scope.double();
                         return;
                     } else {
@@ -103,7 +105,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                     }
                 } else if (n === 17) {
                     // A6 double d3-6, hit d2, d7-A
-                    if (3 <= d <= 6) {
+                    if (d >= 3 && d <= 6) {
                         $scope.double();
                         return;
                     } else {
@@ -111,10 +113,10 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                     }
                 } else if (n === 18) {
                     // A7 double d2-6, stay d7-8, hit d9-A
-                    if (2 <= n <= 6) {
+                    if (n >= 2 && n <= 6) {
                         $scope.double();
                         return;
-                    } else if (7 <= n <= 8) {
+                    } else if (n === 7 || n === 8) {
                         $scope.stay();
                         return;
                     } else {
@@ -136,12 +138,12 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 }
             } else if (n < 17 && !soft) {
                 // hard hands, 17+ stays
-                if (5 <= n <= 8) {
+                if (n >= 5 && n <= 8) {
                     // 5-8 hit
                     $scope.hit();
                 } else if (n === 9) {
                     // 9 double d3-6, hit d2, d7-A
-                    if (3 <= d <= 6) {
+                    if (d >= 3 && d <= 6) {
                         $scope.double();
                         return;
                     } else {
@@ -149,7 +151,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                     }
                 } else if (n === 10) {
                     // 10 double d2-9, hit d10-A
-                    if (2 <= d <= 9) {
+                    if (d >= 2 && d <= 9) {
                         $scope.double();
                         return;
                     } else {
@@ -161,15 +163,15 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                     return;
                 } else if (n === 12) {
                     // 12 hit d2-3, stay d4-6, hit 7-A
-                    if (4 <= d <= 6) {
+                    if (d >= 4 && d <= 6) {
                         $scope.stay();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (13 <= n <= 16) {
+                } else if (n >= 13 && n <= 16) {
                     // 13-16 stay d2-6, hit 7-A
-                    if (2 <= d <= 6) {
+                    if (d >= 2 && d <= 6) {
                         $scope.stay();
                         return;
                     } else {
@@ -242,17 +244,18 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         console.log("hit");
         hands[$scope.turn].push($deck.deal(1)[0]);
         // cannot hit on 21 or over
+        console.log(weight(hands[$scope.turn]));
         if (weight(hands[$scope.turn]) >= 21) {
             $scope.h = false;
         }
         // hide double and split
-        $scope.b = false;
+        $scope.d = false;
         $scope.s = false;
     };
     // switches to the next players turn
     $scope.stay = function () {
-        console.log("stay");
         var i;
+        console.log("Player " + $scope.turn + " stays");
         soft = false;
         $scope.turn += 1;
         for (i = $scope.turn; i < hands.length; i += 1) {
@@ -260,7 +263,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 // skip play of blackjacks
                 $scope.turn += 1;
             } else {
-                return;
+                break;
             }
         }
         // clear flags set earlier
@@ -268,7 +271,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         $scope.d = true;
         /* check for split and show button if yes */
         $scope.s = true;
-        if (humans <= $scope.turn < (humans + $scope.ai)) {
+        console.log("t: " + $scope.turn + ", h&a: " + (humans + $scope.ai));
+        if ($scope.turn >= humans && $scope.turn < (humans + $scope.ai)) {
             playBot();
         } else if ($scope.turn === (humans + $scope.ai)) {
             playDealer();
@@ -322,10 +326,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             $scope.stay();
         }
         soft = false;
-        $scope.b = false;
-    };
-
-    $scope.startGame = function () {
+        // start the game
         $scope.b = true;
         $scope.h = true;
         $scope.d = true;
@@ -333,8 +334,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         $scope.s = true;
         /* show bets & # players, no hands & game buttons
         // hide bets & # players show hands & game buttons */
+
     };
-    
 /********************     UI Functions     ********************/
     // update ai and human players
     $scope.updateAI = function (n) {
