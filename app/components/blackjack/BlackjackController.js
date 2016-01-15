@@ -69,7 +69,10 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             $scope.dealer.push($deck.deal(1)[0]);
             n = weight($scope.dealer);
         }
+        $scope.stay();
     }
+    
+    // AI: https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
     function playBot() {
         var x = hands[$scope.turn][0].rank,
             y = hands[$scope.turn][1].rank,
@@ -77,7 +80,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             d = $scope.dealer[0].rank;
         while (n < 22) {
             if (x === y) {
-                // write split algorithm
+                /* write split algorithm */
                 $scope.split();
             }
             if (n < 20 && soft) {
@@ -127,7 +130,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                         return;
                     }
                 } else {
-                    console.log("AI Error: n " + n + ", d " + d + ", s " + soft);
+                    console.log("AI " + $scope.turn + " Error: n " + n + ", d " + d + ", s " + soft);
                     $scope.stay();
                     return;
                 }
@@ -173,12 +176,13 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                         $scope.hit();
                     }
                 } else {
-                    console.log("AI Error: n " + n + ", d " + d + ", s " + soft);
+                    console.log("AI " + $scope.turn + " Error: n " + n + ", d " + d + ", s " + soft);
                     $scope.stay();
                     return;
                 }
             } else {
-                console.log("AI: n " + n + ", d " + d + ", s " + soft);
+                console.log("AI " + $scope.turn + ": n " + n + ", d " + d + ", s " + soft);
+                $scope.stay();
                 return;
             }
             n = weight(hands[$scope.turn]);
@@ -199,6 +203,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             for (i = 0; i < hands.length; i += 1) {
                 temp = weight(hands[i]);
                 // skip blackjacks but not earned 21s
+                /* If split aces is bj, its not bj, check for this? */
                 if (temp === 21 && hands[i].length === 2) {
                     continue;
                 } else if (weight(hands[i]) <= 21) {
@@ -240,9 +245,9 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         if (weight(hands[$scope.turn]) >= 21) {
             $scope.h = false;
         }
+        // hide double and split
         $scope.b = false;
         $scope.s = false;
-        // hide double and split
     };
     // switches to the next players turn
     $scope.stay = function () {
@@ -258,16 +263,19 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
                 return;
             }
         }
-        // clear any flags set earlier
+        // clear flags set earlier
         $scope.h = true;
         $scope.d = true;
-        // check for split and show button if yes
+        /* check for split and show button if yes */
         $scope.s = true;
-        
-        // check if last human
-        // play ai
-        // evaluate
-        // display end
+        if (humans <= $scope.turn < (humans + $scope.ai)) {
+            playBot();
+        } else if ($scope.turn === (humans + $scope.ai)) {
+            playDealer();
+        } else if ($scope.turn > (humans + $scope.ai)) {
+            evaluate();
+            /* do something here to display the end */
+        }
     };
     // takes 1 hand of doubles, and turns it into 2 hands, duplicates bet
     $scope.split = function () {
@@ -310,7 +318,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         checkBlackjack();
         // skip beginning hand w/ 21
         if (weight(hands[0]) === 21) {
-            // skip play of blackjacks
+            // skip play of initial blackjacks
             $scope.stay();
         }
         soft = false;
@@ -321,10 +329,10 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         $scope.b = true;
         $scope.h = true;
         $scope.d = true;
-        // check for split and show button if yes
+        /* check for split and show button if yes */
         $scope.s = true;
-        // show bets & # players, no hands & game buttons
-        // hide bets & # players show hands & game buttons
+        /* show bets & # players, no hands & game buttons
+        // hide bets & # players show hands & game buttons */
     };
     
 /********************     UI Functions     ********************/
@@ -338,7 +346,3 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
 /********************     Testing Code     ********************/
     $scope.newGame();
 }]);
-
-/* Computer Algorithm
-https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
-*/
