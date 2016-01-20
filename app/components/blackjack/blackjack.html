@@ -20,7 +20,11 @@
                 <div class="col-sm-12">
                     <hr />
                     <h2 class="naration">Dealer</h2>
-                    <div ng-repeat="card in dealer track by $index" class="playingCard handc" ng-class="dropped[$index]" ng-style='card.color' ng-click="toss($index)">
+                    <div class="playingCard handc" ng-style='card.color' ng-show="st">
+                        {{ dealer[0].name }}
+                        <h2 class="suit">{{ dealer[0].suit }}</h2>
+                    </div>
+                    <div ng-repeat="card in dealer track by $index" class="playingCard handc" ng-style='card.color' ng-hide="st">
                         {{ card.name }}
                         <h2 class="suit">{{ card.suit }}</h2>
                     </div>
@@ -40,12 +44,12 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="b && h" ng-click="hit()">Hit</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="b" ng-click="stay()">Stay</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="b && s" ng-click="split()">Split</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="b && d" ng-click="doubledown()">Double Down</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="b" ng-click="newGame()">New Game</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="b" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && h" ng-click="hit()">Hit</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st" ng-click="stay()">Stay</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && sp" ng-click="split()">Split</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && d" ng-click="double()">Double Down</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st" ng-click="newGame()">New Game</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
         </div>
     </div>
     <!-- Modal -->
