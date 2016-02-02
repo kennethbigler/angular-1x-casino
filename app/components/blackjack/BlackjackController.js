@@ -7,7 +7,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     "use strict";
     // prepare data
     var humans = 1,
-        bet = [5, 5, 5, 5, 5, 5],
         hands = [],
         splits = [],
         tracker = 1,
@@ -16,13 +15,15 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     $scope.ai = 5;
     $scope.hands = [];
     $scope.dealer = [];
-    // buttons, hit, double, stay
+    $scope.bet = [];
+    // buttons, stay, hit, double, split, players
     $scope.st = false;
     $scope.h = false;
     $scope.d = false;
     $scope.sp = false;
+    $scope.p = false;
+    $scope.sh = false;
     $scope.stayb = "Stay";
-    
 /********************     Gameplay Helper Functions     ********************/
     function weight(hand) {
         var i = 0,
@@ -51,20 +52,18 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         }
         return value;
     }
-    
     function checkBlackjack() {
         var i;
         if (weight($scope.dealer) === 21) {
             for (i = 0; i < hands.length; i += 1) {
                 if (weight(hands[i]) !== 21) {
-                    $storage.sub(bet[i], i);
+                    $storage.sub($scope.bet[i], i);
                 }
             }
             // End game, dont call eval
             $scope.st = false;
         }
     }
-    
     // Dealer hits on 16 or less and soft 17
     function playDealer() {
         var n = weight($scope.dealer);
@@ -74,7 +73,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             console.log(n);
         }
     }
-    
     // AI: https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
     function playBot() {
         var x = hands[$scope.turn][0].rank,
@@ -228,23 +226,20 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         console.log("bust");
         return;
     }
-    
     // check 21, then win, then draw, then lose
     function payout(s, d) {
         var temp, dealer = weight($scope.dealer);
         temp = weight(hands[s]);
-        /* If split aces is bj, its not bj, check for this? */
         if (temp === 21 && hands[s].length === 2) {
-            $storage.add(1.5 * bet[s], d);
+            $storage.add(1.5 * $scope.bet[s], d);
         } else if ((temp > dealer || dealer > 21) && temp < 22) {
-            $storage.add(bet[s], d);
+            $storage.add($scope.bet[s], d);
         } else if (temp === dealer) {
             console.log("draw");
         } else {
-            $storage.sub(bet[s], d);
+            $storage.sub($scope.bet[s], d);
         }
     }
-
     // check if splits, otherwise evaluate as normal
     function evaluate() {
         var i, temp = 0;
@@ -258,7 +253,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         }
         $scope.st = false;
     }
-    
+    // change ui from bets to play
     function resetVars() {
         var x, y;
         if ($scope.turn >= (humans + $scope.ai)) {
@@ -277,14 +272,21 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             $scope.sp = true;
         }
     }
-    
 /********************     Gameplay Functions     ********************/
     // modify bet
     $scope.setBet = function (n, p) {
-        bet[p] += parseInt(n, 10);
-        if (bet[p] < 5) {
-            bet[p] = 5;
+        $scope.bet[p] += parseInt(n, 10);
+        if ($scope.bet[p] < 5) {
+            $scope.bet[p] = 5;
+        } else if ($scope.bet[p] > 100) {
+            $scope.bet[p] = 100;
         }
+    };
+    // transition from bets to play
+    $scope.showHand = function () {
+        $scope.p = false;
+        $scope.sh = false;
+        resetVars();
     };
     // player gets an extra card, forced to stay on x >= 21
     $scope.hit = function () {
@@ -307,7 +309,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
             playDealer();
             evaluate();
             $scope.stayb = "Stay";
-            /* do something here to display the end */
             return;
         }
         // skip play of blackjacks
@@ -340,9 +341,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         // insert hands and position holders in bet and names
         hands.splice($scope.turn + 1, 0, [hands[$scope.turn].pop(), $deck.deal(1)[0]]);
         hands[$scope.turn].push($deck.deal(1)[0]);
-        bet.splice($scope.turn + 1, 0, bet[$scope.turn]);
+        $scope.bet.splice($scope.turn + 1, 0, $scope.bet[$scope.turn]);
         $scope.sp = false;
-        /* Create a way to pair hands together in view */
         resetVars();
         // add room in turn order for extra hand
         if ($scope.turn < humans) {
@@ -362,17 +362,17 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
     // double bet and get only 1 card
     $scope.double = function () {
         console.log("double");
-        bet[$scope.turn] += bet[$scope.turn];
+        $scope.bet[$scope.turn] += $scope.bet[$scope.turn];
         hands[$scope.turn].push($deck.deal(1)[0]);
         $scope.h = false;
         $scope.d = false;
         $scope.sp = false;
     };
-    
     // new game
     $scope.newGame = function () {
         var i;
         $scope.turn = 0;
+        $scope.bet = [5, 5, 5, 5, 5, 5];
         $scope.updateAI(tracker);
         $deck.shuffle();
         hands = [];
@@ -382,27 +382,21 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         }
         $scope.dealer = $deck.deal(2);
         $scope.hands = hands;
-        soft = false;
-        // skip beginning hand w/ 21
-        if (weight(hands[0]) === 21) {
-            // skip play of initial blackjacks
-            $scope.h = false;
-            $scope.d = false;
-            $scope.sp = false;
-            return;
-        }
         // start the game
+        soft = false;
         $scope.st = true;
-        resetVars();
+        $scope.p = true;
+        $scope.sh = true;
+        $scope.h = false;
+        $scope.d = false;
+        $scope.sp = false;
         checkBlackjack();
-        /* switch back to bets & player selection */
     };
-    
     /*
-    // show bets & # players at start, no hands & game buttons
-    // functions like set bets, updateAI
-    // click startgame button to:
-    // hide bets & # players, then show hands & game buttons
+    // if split aces is bj, its not bj, check for this?
+    // add player indicator
+    // change player names
+    // fix player hand representations after splits
     */
 /********************     UI Functions     ********************/
     // update ai and human players

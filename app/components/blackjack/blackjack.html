@@ -1,12 +1,12 @@
 <header></header>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-10">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3" ng-show="p">
                     <h2 class="naration">Humans:&nbsp;</h2>
                 </div>
-                <div class="col-sm-7">
+                <div class="col-sm-7" ng-show="p">
                     <a id="b1" class="btn btn-default btn-lg handc btn-danger" role="button" ng-click="updateAI(1)">1</a>
                     <a id="b2" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(2)">2</a>
                     <a id="b3" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(3)">3</a>
@@ -14,13 +14,12 @@
                     <a id="b5" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(5)">5</a>
                     <a id="b6" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(6)">6</a>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-2" ng-show="p">
                     <h2 class="naration">AI: {{ ai }}</h2>
                 </div>
                 <div class="col-sm-12">
-                    <hr />
-                    <h2 class="naration">Dealer</h2>
-                    <div class="playingCard handc" ng-style='dealer[0].color' ng-show="st">
+                    <h2 class="naration" ng-hide="p">Dealer</h2>
+                    <div class="playingCard handc" ng-style='dealer[0].color' ng-show="st" ng-hide="p">
                         {{ dealer[0].name }}
                         <h2 class="suit">{{ dealer[0].suit }}</h2>
                     </div>
@@ -29,23 +28,33 @@
                         <h2 class="suit">{{ card.suit }}</h2>
                     </div>
                     <span class="clear"></span>
-                    <hr/>
+                    <hr />
                     <div class="row">
                         <div class="col-sm-2" ng-repeat="loss in hands track by $index">
-                            <h2 class="naration inline">Player {{ $index + 1 }}:&nbsp;</h2>
-                            <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color'>
+                            <h2 class="naration">Player {{ $index + 1 }}:&nbsp;</h2>
+                            <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color' ng-hide="p">
                                 {{ card.name }}
                                 <h2 class="suit">{{ card.suit }}</h2>
                             </div>
                             <span class="clear"></span>
+                            <form class="form-inline" role="form">
+                                <div class="form-group bet" ng-show="p">
+                                    <div class="input-group-btn-vertical inline">
+                                        <button class="btn btn-default" type="button" ng-click="setBet(5,$index)"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn btn-default" type="button" ng-click="setBet(-5,$index)"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <h2 class="naration inline">&nbsp;Bet: {{ bet[$index] }}</h2>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="sh" ng-click="showHand()">Deal</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && h" ng-click="hit()">Hit</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st" ng-click="stay()">{{ stayb }}</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st && sh" ng-show="st" ng-click="stay()">{{ stayb }}</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && sp" ng-click="split()">Split</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && d" ng-click="double()">Double Down</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st" ng-click="newGame()">New Game</button>
