@@ -12,10 +12,8 @@ var app = angular.module('myApp', ['ngRoute'])
                     itr = 0;
                     var n = 100, i, j, k, temp;
                     for (i = 0; i < n; i += 1) {
-                        j = Math.floor(Math.random() * 52) + 1;
-                        k = Math.floor(Math.random() * 52) + 1;
-                        if (j > 51) { j = 51; }
-                        if (k > 51) { k = 51; }
+                        j = Math.floor(Math.random() * 52);
+                        k = Math.floor(Math.random() * 52);
                         temp = deck[j];
                         deck[j] = deck[k];
                         deck[k] = temp;
@@ -116,8 +114,8 @@ var app = angular.module('myApp', ['ngRoute'])
             if (Object.keys(names).length === 0) {
                 names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
             }
-            console.log(savings);
-            console.log(names);
+            // console.log(savings);
+            // console.log(names);
             return {
                 savings: savings,
                 names: names,

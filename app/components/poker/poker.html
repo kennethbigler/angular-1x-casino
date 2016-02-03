@@ -27,7 +27,7 @@
                     <span class="clear"></span>
                     <hr ng-show="df && nf"/>
                     <div ng-repeat="loss in hands track by $index">
-                        <h2 class="naration inline">Player {{ $index + 1 }}:&nbsp;</h2>
+                        <h2 class="naration pline inline">Player {{ $index + 1 }}:&nbsp;</h2>
                         <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color'>
                             {{ card.name }}
                             <h2 class="suit">{{ card.suit }}</h2>

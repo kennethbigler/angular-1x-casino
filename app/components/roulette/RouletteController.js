@@ -5,6 +5,8 @@ app.controller('RouletteController', function ($scope, $deck) {
     // place bets
     // spin wheel
     // evaluate
+    var r = Math.floor(Math.random() * 38);
+    $scope.result = r;
 });
 
 /*
