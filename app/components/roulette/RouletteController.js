@@ -6,6 +6,9 @@ app.controller('RouletteController', function ($scope, $deck) {
     // spin wheel
     // evaluate
     var r = Math.floor(Math.random() * 38);
+    if (r >= 37) {
+        r = "00";
+    }
     $scope.result = r;
 });
 
