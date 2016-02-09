@@ -378,6 +378,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', function (
         checkBlackjack();
     };
     /* To do list:
+    // BUG: if dealer gets 21 it shows the hand before bets!!!
     // if split aces is bj, its not bj, check for this?
     // add player indicator
     // change player names

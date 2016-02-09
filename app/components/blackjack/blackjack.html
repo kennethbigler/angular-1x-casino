@@ -59,7 +59,7 @@
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && sp" ng-click="split()">Split</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && d" ng-click="double()">Double Down</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st" ng-click="newGame()">New Game</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="sh" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
         </div>
     </div>
     <!-- Modal -->
@@ -101,6 +101,78 @@
                         <li>Dealer hits on 16 or less and soft 17</li>
                         <li>Minimum bet is $5</li>
                     </ul>
+                    <h4>AI Algorithm:</h4>
+                    <ul>
+                        <li>House Rules: 6 decks, H17, DAS, No Surrender, Peek</li>
+                        <li>Estimated casino edge for these rules: 0.66%</li>
+                    </ul>
+                    
+                    
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <thead><th colspan="11">Hard Totals</th></thead>
+                            <tr><td rowspan="2">Your<br>Hand</td><td colspan="10">Dealer</td></tr>
+                            <tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>T</td><td>A</td></tr>
+                            <tr><td>Hard 5</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 6</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 7</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 8</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 9</td><td class="success">H</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 10</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 11</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td></tr>
+                            <tr><td>Hard 12</td><td class="success">H</td><td class="success">H</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 13</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 14</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 15</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 16</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Hard 17</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td></tr>
+                            <tr><td>Hard 18+</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td></tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <thead><th colspan="11">Soft Totals</th></thead>
+                            <tr><td rowspan="2">Your<br>Hand</td><td colspan="10">Dealer</td></tr>
+                            <tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>T</td><td>A</td></tr>
+                            <tr><td>Ace + 2</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Ace + 3</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Ace + 4</td><td class="success">H</td><td class="success">H</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Ace + 5</td><td class="success">H</td><td class="success">H</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Ace + 6</td><td class="success">H</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Ace + 7</td><td class="info">DS</td><td class="info">DS</td><td class="info">DS</td><td class="info">DS</td><td class="info">DS</td><td class="danger">S</td><td class="danger">S</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>Ace + 8</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="info">DS</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td></tr>
+                            <tr><td>Ace + 9</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td></tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <thead><th colspan="11">Pairs</th></thead>
+                            <tr><td rowspan="2">Your<br>Hand</td><td colspan="10">Dealer</td></tr>
+                            <tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>T</td><td>A</td></tr>
+                            <tr><td>(2,2)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>(3,3)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>(4,4)</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="warning">P</td><td class="warning">P</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>(5,5)</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="info">D</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>(6,6)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>(7,7)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="success">H</td><td class="success">H</td><td class="success">H</td><td class="success">H</td></tr>
+                            <tr><td>(8,8)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td></tr>
+                            <tr><td>(9,9)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="danger">S</td><td class="warning">P</td><td class="warning">P</td><td class="danger">S</td><td class="danger">S</td></tr>
+                            <tr><td>(T,T)</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td><td class="danger">S</td></tr>
+                            <tr><td>(A,A)</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td><td class="warning">P</td></tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <thead><th colspan="11">Key</th></thead>
+                            <tr>
+                                <td class="success">H</td><td colspan="2">= Hit</td>
+                                <td class="danger">S</td><td colspan="3">= Stand</td>
+                                <td class="warning">P</td><td colspan="3">= Split</td>
+                            </tr>
+                            <tr><td class="info">D</td><td colspan="10">= Double (Hit if not allowed)</td></tr>
+                            <tr><td class="info">DS</td><td colspan="10">= Double (Stand if not allowed)</td></tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
