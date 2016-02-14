@@ -8,6 +8,11 @@
             <div class="col-sm-2" ng-repeat="money in storage.savings track by $index">
                 <h4 class="naration">{{ storage.names[$index] }}: {{ money }}</h4>
             </div>
+            <form class="form-inline">
+                <div class="form-group col-sm-2" ng-repeat="name in storage.names track by $index">
+                    <input type="text" class="form-control" ng-model="name">
+                </div>
+            </form>
         </div>        
     </div>
 </div>

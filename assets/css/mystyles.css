@@ -88,6 +88,39 @@ header {
     margin-left: 5px;
 }
 
+/***** roulette *****/
+.red {
+    background-color: #D9183B;
+}
+.black {
+    background-color: #02050D;
+}
+.noborder {
+    border: 0 !important;
+}
+.roulettebet {
+    color: white;
+    border: 0;
+    text-align: center;
+}
+
+/***** craps *****/
+.rotateLeft {
+    -webkit-transform: rotate(-90deg); /* Safari */
+       -moz-transform: rotate(-90deg); /* Firefox */
+        -ms-transform: rotate(-90deg); /* IE */
+         -o-transform: rotate(-90deg); /* Opera */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* Internet Explorer */
+}
+
+.rotateRight {
+    -webkit-transform: rotate(90deg); /* Safari */
+       -moz-transform: rotate(90deg); /* Firefox */
+        -ms-transform: rotate(90deg); /* IE */
+         -o-transform: rotate(90deg); /* Opera */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); /* Internet Explorer */
+}
+
 /***** up/down arrows *****/
 .input-group-btn-vertical {
     position: relative;

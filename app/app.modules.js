@@ -112,7 +112,7 @@ var app = angular.module('myApp', ['ngRoute'])
                 savings = [100, 100, 100, 100, 100, 100];
             }
             if (Object.keys(names).length === 0) {
-                names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
+                names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
             }
             // console.log(savings);
             // console.log(names);
@@ -136,12 +136,12 @@ var app = angular.module('myApp', ['ngRoute'])
                     $localstorage.remove('savings');
                 },
                 resetNames: function () {
-                    this.names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
+                    this.names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
                     $localstorage.remove('names');
                 },
                 reset: function () {
                     this.savings = [100, 100, 100, 100, 100, 100];
-                    this.names = ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6"];
+                    this.names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
                     $localstorage.remove('savings');
                     $localstorage.remove('names');
                     console.log("reset");

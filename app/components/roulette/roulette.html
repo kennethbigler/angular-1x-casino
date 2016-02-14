@@ -1,8 +1,79 @@
 <header></header>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6">
-            <h2 class="naration">{{ result }}</h2>
+        <div class="col-sm-3">
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-click="spin()">Spin</button>
+            <h2 class="naration">Spin: {{ result }}</h2>
+        </div>
+        <div class="col-sm-9">
+            <table class="table table-bordered roulettebet">
+                <tbody>
+                    <tr>
+                        <td rowspan="2">00</td>
+                        <td class="red">3</td>
+                        <td class="black">6</td>
+                        <td class="red">9</td>
+                        <td class="red">12</td>
+                        <td class="black">15</td>
+                        <td class="red">18</td>
+                        <td class="red">21</td>
+                        <td class="black">24</td>
+                        <td class="red">27</td>
+                        <td class="red">30</td>
+                        <td class="black">33</td>
+                        <td class="red">36</td>
+                        <td>2-1</td>
+                    </tr>
+                    <tr>
+                        <td class="black">2</td>
+                        <td class="red">5</td>
+                        <td class="black">8</td>
+                        <td class="black">11</td>
+                        <td class="red">14</td>
+                        <td class="black">17</td>
+                        <td class="black">20</td>
+                        <td class="red">23</td>
+                        <td class="black">26</td>
+                        <td class="black">29</td>
+                        <td class="red">32</td>
+                        <td class="black">35</td>
+                        <td>2-1</td>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td class="red">1</td>
+                        <td class="black">4</td>
+                        <td class="red">7</td>
+                        <td class="black">10</td>
+                        <td class="black">13</td>
+                        <td class="red">16</td>
+                        <td class="black">19</td>
+                        <td class="black">22</td>
+                        <td class="red">25</td>
+                        <td class="red">28</td>
+                        <td class="black">31</td>
+                        <td class="red">34</td>
+                        <td>2-1</td>
+                    </tr>
+                    <tr>
+                        <th class="noborder"></th>
+                        <td colspan="4">1st 12</td>
+                        <td colspan="4">2nd 12</td>
+                        <td colspan="4">3rd 12</td>
+                        <th class="noborder"></th>
+                    </tr>
+                    <tr>
+                        <th class="noborder"></th>
+                        <td colspan="2">1-18</td>
+                        <td colspan="2">Even</td>
+                        <td class="red" colspan="2">Red</td>
+                        <td class="black" colspan="2">Black</td>
+                        <td colspan="2">Odd</td>
+                        <td colspan="2">19-36</td>
+                        <th class="noborder"></th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -5,11 +5,17 @@ app.controller('RouletteController', function ($scope, $deck) {
     // place bets
     // spin wheel
     // evaluate
-    var r = Math.floor(Math.random() * 38);
-    if (r >= 37) {
-        r = "00";
-    }
-    $scope.result = r;
+    $scope.result = 0;
+    
+    $scope.spin = function () {
+        var r = Math.floor(Math.random() * 38);
+        if (r >= 37) {
+            r = "00";
+        }
+        $scope.result = r;
+    };
+    
+    $scope.spin();
 });
 
 /*
