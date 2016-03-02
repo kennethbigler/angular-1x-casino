@@ -1,6 +1,6 @@
 /*global $, console, app, $scope */
 
-app.controller('CrapsController', function ($scope, $deck) {
+app.controller('CrapsController', ['$scope', '$deck', 'CrapsService', function ($scope, $deck, CrapsService) {
     "use strict";
     // place bets
     // roll dice
@@ -16,7 +16,7 @@ app.controller('CrapsController', function ($scope, $deck) {
     };
     
     $scope.spin();
-});
+}]);
 
 /* Casino Craps (or Bank Craps)
 

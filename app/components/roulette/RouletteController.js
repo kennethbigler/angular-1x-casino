@@ -1,6 +1,6 @@
 /*global $, console, app, $scope */
 
-app.controller('RouletteController', function ($scope, $deck) {
+app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', function ($scope, $deck, RouletteService) {
     "use strict";
     // place bets
     // spin wheel
@@ -16,7 +16,7 @@ app.controller('RouletteController', function ($scope, $deck) {
     };
     
     $scope.spin();
-});
+}]);
 
 /*
 Inside Bets:

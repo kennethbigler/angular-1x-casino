@@ -1,6 +1,6 @@
 /*global $, console, app, $scope */
 
-app.controller('SolitaireController', function ($scope, $deck) {
+app.controller('SolitaireController', ['$scope', '$deck', 'SolitaireService', function ($scope, $deck, SolitaireService) {
     "use strict";
     $deck.shuffle();
     var board = {
@@ -48,4 +48,4 @@ app.controller('SolitaireController', function ($scope, $deck) {
             console.log("Hello world");
         }
     };
-});
+}]);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!-- Favicon -->
-    <link rel="icon" href="assets/img/roadster.png" />
+    <link rel="icon" href="assets/img/card.svg.png" />
     <!-- Device Compatibility -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="Ken, Kenneth, Bigler, Kenneth Bigler, Ken Bigler, Resume, HTML, CSS, JavaScript, C++, C, Software Developer, Web, Web Developer, Web Technologist, Santa Clara, SCU, scu, Santa Clara University, hours, hour reporting, timecard, time, card">
@@ -21,10 +21,15 @@
         'app/app.routes.js',
         'app/components/home/HomeController.js',
         'app/components/blackjack/BlackjackController.js',
+        'app/components/blackjack/BlackjackService.js',
         'app/components/craps/CrapsController.js',
+        'app/components/craps/CrapsService.js',
         'app/components/poker/PokerController.js',
+        'app/components/poker/PokerService.js',
         'app/components/roulette/RouletteController.js',
-        'app/components/solitaire/SolitaireController.js'
+        'app/components/roulette/RouletteService.js',
+        'app/components/solitaire/SolitaireController.js',
+        'app/components/solitaire/SolitaireService.js'
     ].forEach(function(src) {
         var script = document.createElement('script');
         script.src = src;
