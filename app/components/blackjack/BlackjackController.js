@@ -53,7 +53,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             n = BlackjackService.weight(hands[turn]),
             d = $scope.dealer[0].rank;
         while (n < 22) {
-            // split algorithm 
+            // split algorithm
             if (x === y) {
                 if (x === 2 || x === 3 || x === 7) {
                     // 2,3,7, split d2-7, hit d8+
@@ -221,11 +221,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             if (splits.indexOf(i) !== -1) {
                 temp += 1;
                 splits.splice(splits.indexOf(i), 1);
-                /* attempting to get hands to merge, not working
-                $scope.hands[i - 1].push({});
-                $scope.hands[i - 1] = $scope.hands[i - 1].concat($scope.hands[i]);
-                $scope.hands.splice(i, 1);
-                console.log($scope.hands);*/
             }
             payout(i, i - temp);
         }

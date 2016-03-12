@@ -74,9 +74,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
                     player = i + humans;
                 }
             }
-            $scope.df = true;
-            $scope.nf = true;
-            $scope.sf = true;
+            $scope.df = $scope.nf = $scope.sf = true;
             $scope.turn = player;
             $scope.hand = PokerService.hands[player];
             $scope.hands = PokerService.hands;
@@ -105,10 +103,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
             PokerService.hands[i] = $deck.deal(5);
             PokerService.hands[i].sort($deck.rankSort);
         }
-        $scope.df = false;
-        $scope.nf = false;
-        $scope.sf = false;
-        $scope.tf = false;
+        $scope.df = $scope.nf = $scope.sf = $scope.tf = false;
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
         $scope.hands = [];
