@@ -95,6 +95,9 @@ header {
 .black {
     background-color: #02050D;
 }
+.blue {
+    background-color: darkblue;
+}
 .noborder {
     border: 0 !important;
 }

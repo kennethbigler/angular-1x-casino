@@ -1,3 +1,5 @@
+/*global app, console*/
+
 app.factory('BlackjackService', ['$deck', '$storage', function ($deck, $storage) {
     "use strict";
     var factory = {};
@@ -30,7 +32,7 @@ app.factory('BlackjackService', ['$deck', '$storage', function ($deck, $storage)
             }
         }
         return value;
-    }
+    };
     
     return factory;
 }]);

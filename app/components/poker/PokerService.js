@@ -1,3 +1,5 @@
+/*global app, console */
+
 app.factory('PokerService', ['$deck', function ($deck) {
     "use strict";
     var factory = {};
@@ -15,7 +17,7 @@ app.factory('PokerService', ['$deck', function ($deck) {
             factory.hands[p][cards[i]] = $deck.deal(1)[0];
         }
         factory.hands[p].sort($deck.rankSort);
-    }
+    };
     
     /* Compare hands to see who wins
      * Hands is assigned a weight based on hand, then card values
@@ -245,7 +247,7 @@ app.factory('PokerService', ['$deck', function ($deck) {
                 }
             }
         }
-    }
+    };
     
     return factory;
 }]);

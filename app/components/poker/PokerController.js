@@ -1,6 +1,6 @@
 /*global $, console, app, $scope */
 
-app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService', function ($scope, $deck, $storage, PokerService) {
+app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService', function ($scope, $deck, $storage, $PS) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
@@ -8,10 +8,10 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
     $scope.trash = [];
     $scope.ai = 4;
     $scope.turn = 0;
-    $scope.df = false;
-    $scope.nf = false;
-    $scope.sf = false;
-    $scope.tf = false;
+    $scope.discardf = false;
+    $scope.nextf = false;
+    $scope.showf = false;
+    $scope.turnf = false;
     $scope.dropped = ["", "", "", "", ""];
     
     /******************************     View Functions     ******************************/
@@ -23,7 +23,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
         $('#b' + n).addClass('btn-danger');
     };
     
-    // select cards to discard
+    // select cards to discard, visual function changing classes
     $scope.toss = function (t) {
         var i = $scope.trash.indexOf(t);
         if (i !== -1) {
@@ -38,16 +38,16 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
     
     // discard selected cards and get replacements
     $scope.discard = function () {
-        PokerService.discard($scope.trash, $scope.turn);
+        $PS.discard($scope.trash, $scope.turn);
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
-        $scope.df = true;
-        //print(PokerService.hands[$scope.turn]);
+        $scope.discardf = true;
+        //print($PS.hands[$scope.turn]);
     };
     
     // move to the next hand
     $scope.nextHand = function () {
-        $scope.sf = false;
+        $scope.showf = false;
         $scope.turn += 1;
         if ($scope.turn === humans) {
             // to determine winner, decode w/ z = parseInt(result, 13);
@@ -56,7 +56,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
                 player = 0,
                 temp = 0;
             for (i = 0; i < humans; i += 1) {
-                temp = PokerService.evaluate(PokerService.hands[i]);
+                temp = $PS.evaluate($PS.hands[i]);
                 console.log(temp);
                 temp = parseInt(temp, 13);
                 if (temp > max) {
@@ -65,7 +65,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
                 }
             }
             for (i = 0; i < $scope.ai; i += 1) {
-                temp = PokerService.computer(PokerService.hands[i + humans], $scope.turn);
+                temp = $PS.computer($PS.hands[i + humans], $scope.turn);
                 $scope.turn += 1;
                 console.log(temp);
                 temp = parseInt(temp, 13);
@@ -74,10 +74,10 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
                     player = i + humans;
                 }
             }
-            $scope.df = $scope.nf = $scope.sf = true;
+            $scope.discardf = $scope.nextf = $scope.showf = true;
             $scope.turn = player;
-            $scope.hand = PokerService.hands[player];
-            $scope.hands = PokerService.hands;
+            $scope.hand = $PS.hands[player];
+            $scope.hands = $PS.hands;
             if (player === 0) {
                 $storage.add(40, 0);
                 //variable bets
@@ -86,28 +86,28 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
                 //variable bets
             }
         } else {
-            $scope.df = false;
-            $scope.hand = PokerService.hands[$scope.turn];
+            $scope.discardf = false;
+            $scope.hand = $PS.hands[$scope.turn];
         }
-        $scope.tf = true;
+        $scope.turnf = true;
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
     };
     
-    // shuffle the deck and re-distribute PokerService.hands
+    // shuffle the deck and re-distribute $PS.hands
     $scope.newGame = function () {
         var i;
         $scope.turn = 0;
         $deck.shuffle();
         for (i = 0; i < (humans + $scope.ai); i += 1) {
-            PokerService.hands[i] = $deck.deal(5);
-            PokerService.hands[i].sort($deck.rankSort);
+            $PS.hands[i] = $deck.deal(5);
+            $PS.hands[i].sort($deck.rankSort);
         }
-        $scope.df = $scope.nf = $scope.sf = $scope.tf = false;
+        $scope.discardf = $scope.nextf = $scope.showf = $scope.turnf = false;
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
         $scope.hands = [];
-        $scope.hand = PokerService.hands[$scope.turn];
+        $scope.hand = $PS.hands[$scope.turn];
     };
     
     /******************************     Testing     ******************************/

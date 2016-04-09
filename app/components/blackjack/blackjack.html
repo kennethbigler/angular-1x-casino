@@ -3,10 +3,10 @@
     <div class="row">
         <div class="col-sm-10">
             <div class="row">
-                <div class="col-sm-3" ng-show="p">
+                <div class="col-sm-3" ng-show="playersf">
                     <h2 class="naration">Humans:&nbsp;</h2>
                 </div>
-                <div class="col-sm-7" ng-show="p">
+                <div class="col-sm-7" ng-show="playersf">
                     <a id="b1" class="btn btn-default btn-lg handc btn-danger" role="button" ng-click="updateAI(1)">1</a>
                     <a id="b2" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(2)">2</a>
                     <a id="b3" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(3)">3</a>
@@ -14,16 +14,16 @@
                     <a id="b5" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(5)">5</a>
                     <a id="b6" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(6)">6</a>
                 </div>
-                <div class="col-sm-2" ng-show="p">
+                <div class="col-sm-2" ng-show="playersf">
                     <h2 class="naration">AI: {{ ai }}</h2>
                 </div>
                 <div class="col-sm-12">
-                    <h2 class="naration" ng-hide="p">Dealer</h2>
-                    <div class="playingCard handc" ng-style='dealer[0].color' ng-show="st" ng-hide="p">
+                    <h2 class="naration" ng-hide="playersf">Dealer</h2>
+                    <div class="playingCard handc" ng-style='dealer[0].color' ng-show="stayf" ng-hide="playersf">
                         {{ dealer[0].name }}
                         <h2 class="suit">{{ dealer[0].suit }}</h2>
                     </div>
-                    <div ng-repeat="card in dealer track by $index" class="playingCard handc" ng-style='card.color' ng-hide="st">
+                    <div ng-repeat="card in dealer track by $index" class="playingCard handc" ng-style='card.color' ng-hide="stayf">
                         {{ card.name }}
                         <h2 class="suit">{{ card.suit }}</h2>
                     </div>
@@ -31,15 +31,15 @@
                     <hr />
                     <div class="row">
                         <div class="col-sm-2" ng-repeat="loss in hands track by $index">
-                            <h2 class="naration" ng-show="!st || sh">{{ storage.names[$index] }}:&nbsp;</h2>
-                            <h2 class="naration" ng-hide="!st || sh">{{ storage.names[turn] }}:&nbsp;</h2>
-                            <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color' ng-hide="p">
+                            <h2 class="naration" ng-show="!stayf || showHandf">{{ storage.names[$index] }}:&nbsp;</h2>
+                            <h2 class="naration" ng-hide="!stayf || showHandf">{{ storage.names[turn] }}:&nbsp;</h2>
+                            <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color' ng-hide="playersf">
                                 {{ card.name }}
                                 <h2 class="suit">{{ card.suit }}</h2>
                             </div>
                             <span class="clear"></span>
                             <form class="form-inline" role="form">
-                                <div class="form-group bet" ng-show="p">
+                                <div class="form-group bet" ng-show="playersf">
                                     <div class="input-group-btn-vertical inline">
                                         <button class="btn btn-default" type="button" ng-click="setBet(5,$index)"><i class="fa fa-caret-up"></i></button>
                                         <button class="btn btn-default" type="button" ng-click="setBet(-5,$index)"><i class="fa fa-caret-down"></i></button>
@@ -54,13 +54,13 @@
             </div>
         </div>
         <div class="col-sm-2">
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="sh" ng-click="showHand()">Deal</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && h" ng-click="hit()">Hit</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st && sh" ng-show="st" ng-click="stay()">Stay</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && sp" ng-click="split()">Split</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="st && d" ng-click="double()">Double Down</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="st" ng-click="newGame()">New Game</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="sh" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="showHandf" ng-click="showHand()">Deal</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && hitf" ng-click="hit()">Hit</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="stayf && showHandf" ng-show="stayf" ng-click="stay()">Stay</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && splitf" ng-click="split()">Split</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && doublef" ng-click="double()">Double Down</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="stayf" ng-click="newGame()">New Game</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="showHandf" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
         </div>
     </div>
     <!-- Modal -->

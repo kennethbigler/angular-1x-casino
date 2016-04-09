@@ -1,18 +1,35 @@
-/*global $, console, app, $scope */
+/*global $, console, app, $scope, angular */
 
-app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', function ($scope, $deck, RouletteService) {
+app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', function ($scope, $deck, $RS) {
     "use strict";
     // place bets
     // spin wheel
     // evaluate
     $scope.result = 0;
     
-    $scope.spin = function () {
-        var r = Math.floor(Math.random() * 38);
-        if (r >= 37) {
-            r = "00";
+    function clearWinners() {
+        var reset = [],
+            i = 0;
+        reset = document.getElementsByClassName("blue");
+        while (reset.length > 0) {
+            reset[0].classList.remove("blue");
         }
-        $scope.result = r;
+    }
+    
+    function setWinners(spin) {
+        var winners = [],
+            i = 0;
+        winners = document.getElementsByClassName("s" + spin);
+        for (i = 0; i < winners.length; i += 1) {
+            winners[i].classList.add("blue");
+        }
+    }
+    
+    $scope.spin = function () {
+        var result = $RS.spin();
+        clearWinners();
+        setWinners(result);
+        $scope.result = result;
     };
     
     $scope.spin();
