@@ -7,9 +7,9 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
     // evaluate
     $scope.result = 0;
     
+    /***** UI Functions *****/
     function clearWinners() {
-        var reset = [],
-            i = 0;
+        var reset = [];
         reset = document.getElementsByClassName("blue");
         while (reset.length > 0) {
             reset[0].classList.remove("blue");
@@ -25,13 +25,13 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
         }
     }
     
+    /***** Controller *****/
     $scope.spin = function () {
         var result = $RS.spin();
         clearWinners();
         setWinners(result);
         $scope.result = result;
     };
-    
     $scope.spin();
 }]);
 
