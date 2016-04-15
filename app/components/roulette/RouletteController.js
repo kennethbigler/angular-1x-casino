@@ -1,11 +1,7 @@
 /*global $, console, app, $scope, angular */
-
 app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', function ($scope, $deck, $RS) {
     "use strict";
-    // place bets
-    // spin wheel
-    // evaluate
-    $scope.result = 0;
+    $scope.step = "Finish Betting";
     
     /***** UI Functions *****/
     function clearWinners() {
@@ -26,13 +22,25 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
     }
     
     /***** Controller *****/
-    $scope.spin = function () {
-        var result = $RS.spin();
-        clearWinners();
-        setWinners(result);
-        $scope.result = result;
+    $scope.play = function () {
+        switch ($scope.step) {
+        case "Finish Betting":
+            $scope.step = "Spin";
+            break;
+        case "Spin":
+            setWinners($RS.spin());
+            $scope.step = "New Game";
+            break;
+        case "New Game":
+            clearWinners();
+            $scope.step = "Finish Betting";
+            break;
+        default:
+            console.log("Error: stepped out of bounds");
+            $scope.step = "Finish Betting";
+            break;
+        }
     };
-    $scope.spin();
 }]);
 
 /*
@@ -60,4 +68,5 @@ Outside Bets:
 Minumum bet is $10 with $1 chips
 
 http://www.lasvegasdirect.com/roulette-table-layout.gif
+http://www.ildado.com/roulette_table_layout.html
 */
