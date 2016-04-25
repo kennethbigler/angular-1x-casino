@@ -36,6 +36,9 @@ header {
        -moz-box-shadow: .0625em .3125em .625em #888;
     		box-shadow: .0625em .3125em .625em #888;
 }
+.mousec {
+    cursor: default;
+}
 .handc {
 	cursor: pointer;
 	cursor: hand;

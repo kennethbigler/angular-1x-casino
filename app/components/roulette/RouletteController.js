@@ -2,6 +2,35 @@
 app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', function ($scope, $deck, $RS) {
     "use strict";
     $scope.step = "Finish Betting";
+    $scope.bets = [];
+    var crap = [
+        [[37], 7],
+        [[0, 3], 6],
+        [[3], 7],
+        [[3, 6], 6],
+        [[6], 7],
+        [[6, 9], 6],
+        [[9], 7],
+        [[9, 12], 6],
+        [[12], 7],
+        [[12, 15], 6],
+        [[15], 7],
+        [[15, 18], 6],
+        [[18], 7],
+        [[18, 21], 6],
+        [[21], 7],
+        [[21, 24], 6],
+        [[24], 7],
+        [[24, 27], 6],
+        [[27], 7],
+        [[27, 30], 6],
+        [[30], 7],
+        [[30, 33], 6],
+        [[33], 7],
+        [[33, 36], 6],
+        [[36], 7],
+        [[3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36], 1]
+    ];
     
     /***** UI Functions *****/
     function clearWinners() {
@@ -20,6 +49,15 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
             winners[i].classList.add("blue");
         }
     }
+    
+    $scope.bet = function (pos, items, bet) {
+        if (isNaN($scope.bets[pos])) {
+            $scope.bets[pos] = 1;
+        } else {
+            $scope.bets[pos] += 1;
+        }
+        $RS.bet(items, bet);
+    };
     
     /***** Controller *****/
     $scope.play = function () {
@@ -42,6 +80,7 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
         }
     };
 }]);
+
 
 /*
 Inside Bets:
