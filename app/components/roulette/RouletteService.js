@@ -23,9 +23,9 @@ app.factory('RouletteService', ['$deck', function ($deck) {
         return r;
     };
     
-    factory.bet = function (item, bet) {
-        crap[item].bet += 1;
-        check.push(item);
+    factory.placeBet = function (i, bet) {
+        crap[i].bet += bet;
+        check.push(i);
     };
     
     factory.reset = function () {

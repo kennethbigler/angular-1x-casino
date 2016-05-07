@@ -4,6 +4,7 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
     $scope.step = "Finish Betting";
     $scope.bets = [];
     $scope.crap = $RS.crap;
+    $scope.betVal = 1;
     
     /***** UI Functions *****/
     function clearWinners() {
@@ -23,8 +24,8 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
         }
     }
     
-    $scope.bet = function (pos) {
-        console.log($scope.crap[pos]);
+    $scope.placeBet = function (pos) {
+        $RS.placeBet(pos, $scope.betVal);
     };
     
     /***** Controller *****/
