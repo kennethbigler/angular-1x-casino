@@ -1,6 +1,6 @@
-/*global $, console, app, $scope */
+/*global $, app */
 
-app.controller('CrapsController', ['$scope', '$deck', 'CrapsService', function ($scope, $deck, CrapsService) {
+app.controller('CrapsController', ['$scope', '$deck', 'CrapsService', '$log', function ($scope, $deck, CrapsService, $log) {
     "use strict";
     // place bets
     // roll dice

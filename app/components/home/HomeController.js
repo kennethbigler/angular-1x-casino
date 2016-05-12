@@ -1,4 +1,4 @@
-/*global $, console, app, $scope, $location*/
+/*global $, app*/
 
 app.controller('HomeController', ['$scope', '$location', '$storage', function ($scope, $location, $storage) {
     "use strict";

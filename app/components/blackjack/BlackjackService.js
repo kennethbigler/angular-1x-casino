@@ -1,6 +1,6 @@
-/*global app, console*/
+/*global app*/
 
-app.factory('BlackjackService', ['$deck', '$storage', function ($deck, $storage) {
+app.factory('BlackjackService', ['$deck', '$storage', '$log', function ($deck, $storage, $log) {
     "use strict";
     var factory = {};
     
@@ -23,7 +23,7 @@ app.factory('BlackjackService', ['$deck', '$storage', function ($deck, $storage)
                 value += 1;
             } else {
                 // error logging
-                console.log("Weight Error: rank " + temp + ", val " + value);
+                $log.error("Weight Error: rank " + temp + ", val " + value);
             }
             // check for soft "busts"
             if (value > 21 && factory.soft) {

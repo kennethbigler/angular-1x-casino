@@ -1,9 +1,9 @@
 /*jslint continue:true*/
-/*global $, console, app, $scope */
+/*global $, app */
 /* Theoretical Max Score:   386 everyone splits 3 times and busts with 30, dealer bust with 26
  * Card Point Value:        340-380 */
 
-app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'BlackjackService', function ($scope, $deck, $storage, $BS) {
+app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'BlackjackService', '$log', function ($scope, $deck, $storage, $BS, $log) {
     "use strict";
     // prepare data
     var humans = 1,
@@ -45,7 +45,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         while ((n < 17) || (n === 17 && $BS.soft)) {
             $scope.dealer.push($deck.deal(1)[0]);
             n = $BS.weight($scope.dealer);
-            //console.log(n);
+            //$log.log(n);
         }
     }
     // AI: https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
@@ -144,7 +144,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                         return;
                     }
                 } else {
-                    console.log("AI " + turn + " Error: n " + n + ", d " + d + ", s " + $BS.soft);
+                    $log.error("AI " + turn + " Error: n " + n + ", d " + d + ", s " + $BS.soft);
                     return;
                 }
             } else if (n < 17 && !$BS.soft) {
@@ -187,18 +187,18 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                         $scope.hit();
                     }
                 } else {
-                    console.log("AI " + turn + " Error: n " + n + ", d " + d + ", s " + $BS.soft);
+                    $log.error("AI " + turn + " Error: n " + n + ", d " + d + ", s " + $BS.soft);
                     return;
                 }
             } else {
-                //console.log("AI " + turn + ": n " + n + ", d " + d + ", s " + $BS.soft);
+                //$log.log("AI " + turn + ": n " + n + ", d " + d + ", s " + $BS.soft);
                 return;
             }
             n = $BS.weight(hands[turn]);
             x = 0;
             y = 1;
         }
-        //console.log("bust");
+        //$log.log("bust");
         return;
     }
     // check 21, then win, then draw, then lose
@@ -210,7 +210,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         } else if ((temp > dealer || dealer > 21) && temp < 22) {
             $storage.add($scope.bet[s], d);
         } else if (temp === dealer) {
-            console.log("draw");
+            $log.log("draw");
         } else {
             $storage.sub($scope.bet[s], d);
         }
@@ -263,7 +263,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     };
     // player gets an extra card, forced to stay on x >= 21
     $scope.hit = function () {
-        //console.log("hit");
         hands[turn].push($deck.deal(1)[0]);
         // cannot hit on 21 or over
         if ($BS.weight(hands[turn]) >= 21) {
@@ -290,7 +289,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                 for (i = turn; i < (humans + $scope.ai); i += 1) {
                     playBot();
                     $BS.soft = false;
-                    //console.log("AI " + turn + " stays");
+                    //$log.log("AI " + turn + " stays");
                     turn += 1;
                 }
             }
@@ -323,12 +322,11 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             }
         } else {
             $scope.ai += 1;
-            //console.log("ai split");
+            //$log.log("ai split");
         }
     };
     // double bet and get only 1 card
     $scope.double = function () {
-        //console.log("double");
         $scope.bet[turn] += $scope.bet[turn];
         hands[turn].push($deck.deal(1)[0]);
         $scope.hitf = $scope.doublef = $scope.splitf = false;

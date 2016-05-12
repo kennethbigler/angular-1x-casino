@@ -1,6 +1,6 @@
-/*global $, console, app, $scope */
+/*global app */
 
-app.controller('SolitaireController', ['$scope', '$deck', 'SolitaireService', function ($scope, $deck, SolitaireService) {
+app.controller('SolitaireController', ['$scope', '$deck', 'SolitaireService', '$log', function ($scope, $deck, SolitaireService, $log) {
     "use strict";
     $deck.shuffle();
     var board = {
@@ -23,7 +23,7 @@ app.controller('SolitaireController', ['$scope', '$deck', 'SolitaireService', fu
         board[pos].push($deck.deal(1));
     }
     $scope.board = board;
-    console.log($scope.board);
+    $log.log($scope.board);
 
 
     $scope.play = function (num, num2) {
@@ -45,7 +45,7 @@ app.controller('SolitaireController', ['$scope', '$deck', 'SolitaireService', fu
             }
         } else if (tcard.rank === place[len].rank - 1) {
             //move card to the new position
-            console.log("Hello world");
+            $log.log("Hello world");
         }
     };
 }]);

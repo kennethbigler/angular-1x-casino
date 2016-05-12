@@ -1,5 +1,5 @@
 /*global app*/
-app.factory('RouletteService', ['$deck', function ($deck) {
+app.factory('RouletteService', ['$log', function ($log) {
     "use strict";
     var factory = {},
         crap = {},

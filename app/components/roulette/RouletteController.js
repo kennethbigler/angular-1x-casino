@@ -1,5 +1,5 @@
-/*global $, console, app, $scope, angular */
-app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', function ($scope, $deck, $RS) {
+/*global app */
+app.controller('RouletteController', ['$scope', 'RouletteService', '$log', function ($scope, $RS, $log) {
     "use strict";
     $scope.step = "Finish Betting";
     $scope.bets = [];
@@ -43,7 +43,7 @@ app.controller('RouletteController', ['$scope', '$deck', 'RouletteService', func
             $scope.step = "Finish Betting";
             break;
         default:
-            console.log("Error: stepped out of bounds");
+            $log.error("Error: stepped out of bounds");
             $scope.step = "Finish Betting";
             break;
         }

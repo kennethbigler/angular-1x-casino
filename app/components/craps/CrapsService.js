@@ -1,4 +1,5 @@
-app.factory('CrapsService', ['$deck', function ($deck) {
+/*global app*/
+app.factory('CrapsService', ['$log', function ($log) {
     "use strict";
     var factory = {};
 

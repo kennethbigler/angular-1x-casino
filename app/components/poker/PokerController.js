@@ -1,6 +1,6 @@
-/*global $, console, app, $scope */
+/*global $, app */
 
-app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService', function ($scope, $deck, $storage, $PS) {
+app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService', '$log', function ($scope, $deck, $storage, $PS, $log) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
@@ -57,7 +57,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
                 temp = 0;
             for (i = 0; i < humans; i += 1) {
                 temp = $PS.evaluate($PS.hands[i]);
-                console.log(temp);
+                $log.log(temp);
                 temp = parseInt(temp, 13);
                 if (temp > max) {
                     max = temp;
@@ -67,7 +67,7 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
             for (i = 0; i < $scope.ai; i += 1) {
                 temp = $PS.computer($PS.hands[i + humans], $scope.turn);
                 $scope.turn += 1;
-                console.log(temp);
+                $log.log(temp);
                 temp = parseInt(temp, 13);
                 if (temp > max) {
                     max = temp;
