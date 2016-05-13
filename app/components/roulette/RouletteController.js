@@ -5,6 +5,8 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
     $scope.bets = [];
     $scope.crap = $RS.crap;
     $scope.betVal = 1;
+    $scope.showResult = false;
+    $scope.payout = 0;
     
     /***** UI Functions *****/
     function clearWinners() {
@@ -13,6 +15,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         while (reset.length > 0) {
             reset[0].classList.remove("blue");
         }
+        $RS.reset();
     }
     
     function setWinners(spin) {
@@ -22,9 +25,13 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         for (i = 0; i < winners.length; i += 1) {
             winners[i].classList.add("blue");
         }
+        $scope.payout = $RS.evaluate();
     }
     
     $scope.placeBet = function (pos) {
+        if ($scope.step !== "Finish Betting") {
+            return;
+        }
         $RS.placeBet(pos, $scope.betVal);
     };
     
@@ -36,10 +43,12 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
             break;
         case "Spin":
             setWinners($RS.spin());
+            $scope.showResult = true;
             $scope.step = "New Game";
             break;
         case "New Game":
             clearWinners();
+            $scope.showResult = false;
             $scope.step = "Finish Betting";
             break;
         default:
