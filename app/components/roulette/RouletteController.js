@@ -25,7 +25,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         for (i = 0; i < winners.length; i += 1) {
             winners[i].classList.add("blue");
         }
-        $scope.payout = $RS.evaluate();
+        $scope.payout = $RS.evaluate(spin);
     }
     
     $scope.placeBet = function (pos) {

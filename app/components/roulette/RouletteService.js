@@ -4,8 +4,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
     var factory = {},
         crap = {},
         stats = [],
-        check = [],
-        roll = 0;
+        check = [];
 
     // this function loads data from the server
     function loadStats() {
@@ -14,14 +13,15 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
                 stats = data;
             }).error(function () {
                 $log.error("An unexpected error ocurred!");
-                stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             });
     }
     loadStats();
     // this function saves the stats to a text document on the server
-    function saveStats(roll) {
+    function saveStats(roll, payout) {
         //$log.log("post starts");
         stats[roll] += 1;
+        stats[stats.length - 1] += payout;
         $http.post('/casino/assets/php/postStats.php', JSON.stringify(stats))
             .error(function (status) {
                 $log.log(status);
@@ -42,7 +42,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
     
     // evaluate stats to meaningful data
     function evalStats() {
-        var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36],
             black = [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 20, 22, 24, 26, 29, 31, 33, 35],
             sum = 0,
@@ -64,7 +64,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
     
     // 37 is 00
     factory.spin = function () {
-        roll = Math.floor(Math.random() * 38);
+        var roll = Math.floor(Math.random() * 38);
         if (roll > 37) {
             roll = 37;
         }
@@ -82,12 +82,12 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
     };
     
     // evalaute the players hand
-    factory.evaluate = function () {
+    factory.evaluate = function (spin) {
         var payout = 0,
             i = 0;
         // iterate through check array for payout
         for (i = 0; i < check.length; i += 1) {
-            if (crap[check[i]].val.indexOf(roll) !== -1) {
+            if (crap[check[i]].val.indexOf(spin) !== -1) {
                 payout += (crap[check[i]].payout * crap[check[i]].bet);
             }
         }
