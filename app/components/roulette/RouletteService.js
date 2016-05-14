@@ -1,17 +1,74 @@
 /*global app*/
-app.factory('RouletteService', ['$log', '$storage', function ($log, $storage) {
+app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $storage, $http) {
     "use strict";
     var factory = {},
         crap = {},
+        stats = [],
         check = [],
         roll = 0;
 
+    // this function loads data from the server
+    function loadStats() {
+        $http.get("/casino/assets/php/getStats.php")
+            .success(function (data) {
+                stats = data;
+            }).error(function () {
+                $log.error("An unexpected error ocurred!");
+                stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            });
+    }
+    loadStats();
+    // this function saves the stats to a text document on the server
+    function saveStats(roll) {
+        //$log.log("post starts");
+        stats[roll] += 1;
+        $http.post('/casino/assets/php/postStats.php', JSON.stringify(stats))
+            .error(function (status) {
+                $log.log(status);
+            });
+        $log.log(stats);
+        //$log.log("post finished");
+    }
+    // this function resets the stats then saves the cleared data to the server
+    function clearStats() {
+        //post to the server
+        stats = [];
+        $http.post('/casino/assets/php/postStats.php', JSON.stringify(stats))
+            .error(function (status) {
+                $log.log(status);
+            });
+        $log.log("Statistics cleared and saved");
+    }
+    
+    // evaluate stats to meaningful data
+    function evalStats() {
+        var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36],
+            black = [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 20, 22, 24, 26, 29, 31, 33, 35],
+            sum = 0,
+            i = 0;
+        for (i = 0; i < stats.length; i += 1) {
+            sum += stats[i];
+        }
+        for (i = 0; i < stats.length; i += 1) {
+            result[i] = stats[i] / sum;
+            if (red.indexOf(i) !== -1) {
+                result[stats.length] += result[i];
+            } else if (black.indexOf(i) !== -1) {
+                result[stats.length + 1] += result[i];
+            } else {
+                result[stats.length + 2] += result[i];
+            }
+        }
+    }
+    
     // 37 is 00
     factory.spin = function () {
         roll = Math.floor(Math.random() * 38);
         if (roll > 37) {
             roll = 37;
         }
+        saveStats(roll);
         return roll;
     };
     
