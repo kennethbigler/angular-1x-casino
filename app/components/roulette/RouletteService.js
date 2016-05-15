@@ -4,7 +4,8 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
     var factory = {},
         crap = {},
         stats = [],
-        check = [];
+        check = [],
+        risk = 0;
 
     // this function loads data from the server
     function loadStats() {
@@ -16,12 +17,13 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
                 stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             });
     }
-    loadStats();
+
     // this function saves the stats to a text document on the server
     function saveStats(roll, payout) {
         //$log.log("post starts");
         stats[roll] += 1;
-        stats[stats.length - 1] += payout;
+        var cash = risk - payout;
+        stats[stats.length - 1] += cash;
         $http.post('/casino/assets/php/postStats.php', JSON.stringify(stats))
             .error(function (status) {
                 $log.log(status);
@@ -29,6 +31,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         $log.log(stats);
         //$log.log("post finished");
     }
+    
     // this function resets the stats then saves the cleared data to the server
     function clearStats() {
         //post to the server
@@ -45,8 +48,11 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36],
             black = [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 20, 22, 24, 26, 29, 31, 33, 35],
-            sum = 0,
+            sum = -1,
             i = 0;
+        if (stats.length > 0) {
+            loadStats();
+        }
         for (i = 0; i < stats.length; i += 1) {
             sum += stats[i];
         }
@@ -60,7 +66,9 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
                 result[stats.length + 2] += result[i];
             }
         }
+        factory.stats = result;
     }
+    evalStats();
     
     // 37 is 00
     factory.spin = function () {
@@ -75,6 +83,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
     // subtract bet money, add to bet, add to check array
     factory.placeBet = function (i, bet) {
         $storage.sub(bet, 0);
+        risk += bet;
         crap[i].bet += bet;
         if (check.indexOf(i) === -1) {
             check.push(i);
