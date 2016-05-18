@@ -7,6 +7,8 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
     $scope.betVal = 1;
     $scope.showResult = false;
     $scope.payout = 0;
+    $scope.stats = $RS.calc;
+    $log.log($scope.stats);
     
     /***** UI Functions *****/
     function clearWinners() {
@@ -49,6 +51,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         case "New Game":
             clearWinners();
             $scope.showResult = false;
+            $log.log($scope.stats);
             $scope.step = "Finish Betting";
             break;
         default:

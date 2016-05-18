@@ -6,24 +6,59 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         stats = [],
         check = [],
         risk = 0;
-
+    
+//--------------------     RESTful calls to "db"     --------------------//
     // this function loads data from the server
     function loadStats() {
         $http.get("/casino/assets/php/getStats.php")
             .success(function (data) {
                 stats = data;
+                var i = 0,
+                    red = crap[157].val,
+                    black = crap[158].val,
+                    calc = {
+                        red: 0,
+                        black: 0,
+                        zeros: 0,
+                        sum: 0,
+                        profit: stats[stats.length - 1]
+                    };
+                for (i = 0; i < stats.length - 1; i += 1) {
+                    calc.sum += stats[i];
+                    if (red.indexOf(i) !== -1) {
+                        calc.red += stats[i];
+                    } else if (black.indexOf(i) !== -1) {
+                        calc.black += stats[i];
+                    } else {
+                        calc.zeros += stats[i];
+                    }
+                }
+                factory.calc = calc;
             }).error(function () {
                 $log.error("An unexpected error ocurred!");
                 stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             });
     }
-
+    
     // this function saves the stats to a text document on the server
-    function saveStats(roll, payout) {
+    function saveStats(roll, profit) {
         //$log.log("post starts");
+        var red = crap[157].val,
+            black = crap[158].val;
+        // update rolls
         stats[roll] += 1;
-        var cash = risk - payout;
-        stats[stats.length - 1] += cash;
+        factory.calc.sum += 1;
+        // update profit
+        stats[stats.length - 1] += profit;
+        factory.calc.profit += profit;
+        // update red/black
+        if (red.indexOf(roll) !== -1) {
+            factory.calc.red += 1;
+        } else if (black.indexOf(roll) !== -1) {
+            factory.calc.black += 1;
+        } else {
+            factory.calc.zeros += 1;
+        }
         $http.post('/casino/assets/php/postStats.php', JSON.stringify(stats))
             .error(function (status) {
                 $log.log(status);
@@ -43,40 +78,13 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         $log.log("Statistics cleared and saved");
     }
     
-    // evaluate stats to meaningful data
-    function evalStats() {
-        var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            red = [1, 3, 5, 7, 9, 12, 14, 16, 18, 21, 23, 25, 27, 28, 30, 32, 34, 36],
-            black = [2, 4, 6, 8, 10, 11, 13, 15, 17, 19, 20, 22, 24, 26, 29, 31, 33, 35],
-            sum = -1,
-            i = 0;
-        if (stats.length > 0) {
-            loadStats();
-        }
-        for (i = 0; i < stats.length; i += 1) {
-            sum += stats[i];
-        }
-        for (i = 0; i < stats.length; i += 1) {
-            result[i] = stats[i] / sum;
-            if (red.indexOf(i) !== -1) {
-                result[stats.length] += result[i];
-            } else if (black.indexOf(i) !== -1) {
-                result[stats.length + 1] += result[i];
-            } else {
-                result[stats.length + 2] += result[i];
-            }
-        }
-        factory.stats = result;
-    }
-    evalStats();
-    
+//--------------------     factory to return to controller     --------------------//
     // 37 is 00
     factory.spin = function () {
         var roll = Math.floor(Math.random() * 38);
         if (roll > 37) {
             roll = 37;
         }
-        saveStats(roll);
         return roll;
     };
     
@@ -102,6 +110,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         }
         // pay player
         $storage.add(payout, 0);
+        saveStats(spin, (risk - payout));
         return payout;
     };
     
@@ -112,6 +121,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         }
     };
     
+//--------------------     Roulette Data Structure     --------------------//
     // Model - [$index: {val: [], payout: int, bet: int}]
     crap = [
         {val: [37], payout: 36, bet: null},
