@@ -193,12 +193,18 @@
         <div class="col-sm-3">
             <h2 class="naration" ng-show="showResult">Result: +${{ payout }}</h2>
         </div>
+        <br />
         <table class="table table-striped table-hover">
             <tr>
-                <th>Number</th>
-                <th>Data</th>
+                <th>Red</th>
+                <th>Black</th>
+                <th>Profit</th>
             </tr>
-            <tr></tr>
+            <tr>
+                <td>{{ calc.red }}</td>
+                <td>{{ calc.black }}</td>
+                <td>{{ calc.profit }}</td>
+            </tr>
         </table>
     </div>
 </div>
