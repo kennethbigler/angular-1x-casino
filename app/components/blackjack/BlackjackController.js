@@ -35,9 +35,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                 }
             }
             // End game, dont call eval
-            $scope.hitf = $scope.doublef = $scope.splitf = false;
             $scope.hands = hands;
-            $scope.stayf = false;
+            $scope.hitf = $scope.doublef = $scope.splitf = $scope.stayf = false;
         }
         return;
     }
@@ -285,8 +284,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             $scope.hands = hands;
             playDealer();
             evaluate();
-            return;
         }
+        return;
     };
     // takes 1 hand of doubles, and turns it into 2 hands, duplicates bet
     $scope.split = function () {
@@ -307,7 +306,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             if (hands[turn][0].rank === 14) {
                 $scope.hitf = $scope.doublef = false;
                 turn += 2;
-                return;
             }
         } else {
             $scope.ai += 1;
