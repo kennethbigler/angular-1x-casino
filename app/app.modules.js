@@ -138,6 +138,16 @@ var app = angular.module('myApp', ['ngRoute'])
                     this.names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
                     $localstorage.remove('savings');
                     $localstorage.remove('names');
+                },
+                getRStats: function () {
+                    var stats = $localstorage.getObject('rStats');
+                    if (Object.keys(stats).length === 0) {
+                        stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    }
+                    return stats;
+                },
+                postRStats: function (stats) {
+                    $localstorage.putObject('rStats', stats);
                 }
             };
         }]);
