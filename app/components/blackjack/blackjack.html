@@ -2,11 +2,11 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-10">
-            <div class="row">
-                <div class="col-sm-3" ng-show="playersf">
+            <div class="row" ng-show="prePlayf">
+                <div class="col-sm-3">
                     <h2 class="naration">Humans:&nbsp;</h2>
                 </div>
-                <div class="col-sm-7" ng-show="playersf">
+                <div class="col-sm-7">
                     <a id="b1" class="btn btn-default btn-lg handc btn-danger" role="button" ng-click="updateAI(1)">1</a>
                     <a id="b2" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(2)">2</a>
                     <a id="b3" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(3)">3</a>
@@ -14,12 +14,12 @@
                     <a id="b5" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(5)">5</a>
                     <a id="b6" class="btn btn-default btn-lg handc" role="button" ng-click="updateAI(6)">6</a>
                 </div>
-                <div class="col-sm-2" ng-show="playersf">
+                <div class="col-sm-2">
                     <h2 class="naration">AI: {{ ai }}</h2>
                 </div>
                 <div class="col-sm-12">
-                    <h2 class="naration" ng-hide="playersf">Dealer</h2>
-                    <div class="playingCard handc" ng-style='dealer[0].color' ng-show="stayf" ng-hide="playersf">
+                    <h2 class="naration" ng-hide="prePlayf">Dealer</h2>
+                    <div class="playingCard handc" ng-style='dealer[0].color' ng-show="stayf">
                         {{ dealer[0].name }}
                         <h2 class="suit">{{ dealer[0].suit }}</h2>
                     </div>
@@ -31,15 +31,15 @@
                     <hr />
                     <div class="row">
                         <div class="col-sm-2" ng-repeat="loss in hands track by $index">
-                            <h2 class="naration" ng-show="!stayf || showHandf">{{ storage.names[$index] }}:&nbsp;</h2>
-                            <h2 class="naration" ng-hide="!stayf || showHandf">{{ storage.names[turn] }}:&nbsp;</h2>
-                            <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color' ng-hide="playersf">
+                            <h2 class="naration" ng-show="!stayf || prePlayf">{{ storage.names[$index] }}:&nbsp;</h2>
+                            <h2 class="naration" ng-hide="!stayf || prePlayf">{{ storage.names[turn] }}:&nbsp;</h2>
+                            <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color' ng-hide="prePlayf">
                                 {{ card.name }}
                                 <h2 class="suit">{{ card.suit }}</h2>
                             </div>
                             <span class="clear"></span>
-                            <form class="form-inline" role="form">
-                                <div class="form-group bet" ng-show="playersf">
+                            <form class="form-inline" role="form" ng-show="prePlayf">
+                                <div class="form-group bet">
                                     <div class="input-group-btn-vertical inline">
                                         <button class="btn btn-default" type="button" ng-click="setBet(5,$index)"><i class="fa fa-caret-up"></i></button>
                                         <button class="btn btn-default" type="button" ng-click="setBet(-5,$index)"><i class="fa fa-caret-down"></i></button>
@@ -54,13 +54,13 @@
             </div>
         </div>
         <div class="col-sm-2">
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="showHandf" ng-click="showHand()">Deal</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="prePlayf" ng-click="showHand()">Deal</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && hitf" ng-click="hit()">Hit</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && !showHandf" ng-click="stay()">Stay</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && !prePlayf" ng-click="stay()">Stay</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && splitf" ng-click="split()">Split</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && doublef" ng-click="double()">Double Down</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="!stayf" ng-click="newGame()">New Game</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="showHandf" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="prePlayf" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
         </div>
     </div>
     <!-- Modal -->

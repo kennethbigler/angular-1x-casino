@@ -18,6 +18,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
             reset[0].classList.remove("blue");
         }
         $RS.reset();
+        return;
     }
     
     function setWinners(spin) {
@@ -28,10 +29,12 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
             winners[i].classList.add("blue");
         }
         $scope.payout = $RS.evaluate(spin);
+        return;
     }
     
     $scope.setBet = function (n) {
         $scope.betVal += n;
+        return;
     };
     
     $scope.placeBet = function (pos) {
@@ -39,6 +42,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
             return;
         }
         $RS.placeBet(pos, $scope.betVal);
+        return;
     };
     
     /***** Controller *****/
@@ -63,6 +67,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
             $scope.step = "Finish Betting";
             break;
         }
+        return;
     };
 }]);
 

@@ -22,8 +22,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     $scope.hitf = false;
     $scope.doublef = false;
     $scope.splitf = false;
-    $scope.playersf = false;
-    $scope.showHandf = false;
+    $scope.prePlayf = false;
     
 /********************     Gameplay Helper Functions     ********************/
     function checkBlackjack() {
@@ -241,7 +240,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     };
     // transition from bets to play
     $scope.showHand = function () {
-        $scope.playersf = $scope.showHandf = false;
+        $scope.prePlayf = false;
         $scope.hands = [hands[turn]];
         resetVars();
         checkBlackjack();
@@ -337,7 +336,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         $scope.hands = hands;
         // start the game
         $BS.soft = $scope.hitf = $scope.doublef = $scope.splitf = false;
-        $scope.stayf = $scope.playersf = $scope.showHandf = true;
+        $scope.stayf = $scope.prePlayf = true;
         return;
     };
     /* To do list:

@@ -199,6 +199,7 @@ app.factory('RouletteService', ['$log', '$storage', function ($log, $storage) {
                 factory.calc.zeros += stats[i];
             }
         }
+        return;
     }
     loadStats();
     
@@ -222,6 +223,7 @@ app.factory('RouletteService', ['$log', '$storage', function ($log, $storage) {
             factory.calc.zeros += 1;
         }
         $storage.postRStats(stats);
+        return;
     }
     
     // this function resets the stats then saves the cleared data to the server
@@ -230,6 +232,7 @@ app.factory('RouletteService', ['$log', '$storage', function ($log, $storage) {
         stats = [];
         $storage.postRStats(stats);
         $log.log("Statistics cleared and saved");
+        return;
     }
     
 //--------------------     factory to return to controller     --------------------//
@@ -250,6 +253,7 @@ app.factory('RouletteService', ['$log', '$storage', function ($log, $storage) {
         if (check.indexOf(i) === -1) {
             check.push(i);
         }
+        return;
     };
     
     // evalaute the players hand
@@ -274,6 +278,7 @@ app.factory('RouletteService', ['$log', '$storage', function ($log, $storage) {
         while (check.length > 0) {
             crap[check.pop()].bet = null;
         }
+        return;
     };
     
     return factory;
