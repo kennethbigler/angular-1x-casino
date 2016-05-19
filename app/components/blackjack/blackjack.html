@@ -56,10 +56,10 @@
         <div class="col-sm-2">
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="showHandf" ng-click="showHand()">Deal</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && hitf" ng-click="hit()">Hit</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="showHandf" ng-show="stayf" ng-click="stay()">Stay</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && !showHandf" ng-click="stay()">Stay</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && splitf" ng-click="split()">Split</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="stayf && doublef" ng-click="double()">Double Down</button>
-            <button type="button" class="btn btn-default btn-lg btn-block" ng-hide="stayf" ng-click="newGame()">New Game</button>
+            <button type="button" class="btn btn-default btn-lg btn-block" ng-show="!stayf" ng-click="newGame()">New Game</button>
             <button type="button" class="btn btn-default btn-lg btn-block" ng-show="showHandf" data-toggle="modal" data-target="#rules">Blackjack Rules</button>
         </div>
     </div>
