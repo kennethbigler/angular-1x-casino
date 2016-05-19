@@ -186,25 +186,29 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <button type="button" class="btn btn-default btn-lg btn-block" ng-click="play()">{{ step }}</button>
         </div>
-        <div class="col-sm-6"></div>
-        <div class="col-sm-3">
-            <h2 class="naration" ng-show="showResult">Result: +${{ payout }}</h2>
+        <div class="col-sm-4">
+            <h2 class="naration" ng-show="showResult">Result: ${{ payout }}</h2>
         </div>
-        <br />
-        <table class="table table-striped table-hover">
-            <tr>
-                <th>Red</th>
-                <th>Black</th>
-                <th>Profit</th>
-            </tr>
-            <tr>
-                <td>{{ calc.red }}</td>
-                <td>{{ calc.black }}</td>
-                <td>{{ calc.profit }}</td>
-            </tr>
-        </table>
+        <div class="col-sm-4">
+            <form class="form-inline" role="form">
+                <div class="form-group bet">
+                    <div class="input-group-btn-vertical inline">
+                        <button class="btn btn-default" type="button" ng-click="setBet(1)"><i class="fa fa-caret-up"></i></button>
+                        <button class="btn btn-default" type="button" ng-click="setBet(-1)"><i class="fa fa-caret-down"></i></button>
+                    </div>
+                    <h2 class="naration inline">&nbsp;Bet: {{ betVal }}</h2>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12">
+            <br />
+            <h2 class="naration col-sm-3">Red: ~{{ stats.red / stats.sum * 100 | number:0 }}%</h2>
+            <h2 class="naration col-sm-3">Black: ~{{ stats.black / stats.sum * 100 | number:0 }}%</h2>
+            <h2 class="naration col-sm-3">Zeros: ~{{ stats.zeros / stats.sum * 100 | number:0 }}%</h2>
+            <h2 class="naration col-sm-3">Casino Profit: ${{ stats.profit }}</h2>
+        </div>
     </div>
 </div>

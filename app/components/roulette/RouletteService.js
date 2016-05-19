@@ -8,6 +8,13 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         risk = 0;
     
 //--------------------     RESTful calls to "db"     --------------------//
+    factory.calc = {
+        red: 0,
+        black: 0,
+        zeros: 0,
+        sum: 0,
+        profit: 0
+    };
     // this function loads data from the server
     function loadStats() {
         $http.get("/casino/assets/php/getStats.php")
@@ -15,30 +22,24 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
                 stats = data;
                 var i = 0,
                     red = crap[157].val,
-                    black = crap[158].val,
-                    calc = {
-                        red: 0,
-                        black: 0,
-                        zeros: 0,
-                        sum: 0,
-                        profit: stats[stats.length - 1]
-                    };
+                    black = crap[158].val;
+                factory.calc.profit += stats[stats.length - 1];
                 for (i = 0; i < stats.length - 1; i += 1) {
-                    calc.sum += stats[i];
+                    factory.calc.sum += stats[i];
                     if (red.indexOf(i) !== -1) {
-                        calc.red += stats[i];
+                        factory.calc.red += stats[i];
                     } else if (black.indexOf(i) !== -1) {
-                        calc.black += stats[i];
+                        factory.calc.black += stats[i];
                     } else {
-                        calc.zeros += stats[i];
+                        factory.calc.zeros += stats[i];
                     }
                 }
-                factory.calc = calc;
             }).error(function () {
                 $log.error("An unexpected error ocurred!");
-                stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                stats = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             });
     }
+    loadStats();
     
     // this function saves the stats to a text document on the server
     function saveStats(roll, profit) {
@@ -49,8 +50,8 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         stats[roll] += 1;
         factory.calc.sum += 1;
         // update profit
-        stats[stats.length - 1] += profit;
         factory.calc.profit += profit;
+        stats[stats.length - 1] += profit;
         // update red/black
         if (red.indexOf(roll) !== -1) {
             factory.calc.red += 1;
@@ -63,7 +64,6 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
             .error(function (status) {
                 $log.log(status);
             });
-        $log.log(stats);
         //$log.log("post finished");
     }
     
@@ -111,6 +111,7 @@ app.factory('RouletteService', ['$log', '$storage', '$http', function ($log, $st
         // pay player
         $storage.add(payout, 0);
         saveStats(spin, (risk - payout));
+        risk = 0;
         return payout;
     };
     

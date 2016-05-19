@@ -30,6 +30,10 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         $scope.payout = $RS.evaluate(spin);
     }
     
+    $scope.setBet = function (n) {
+        $scope.betVal += n;
+    };
+    
     $scope.placeBet = function (pos) {
         if ($scope.step !== "Finish Betting") {
             return;
@@ -46,12 +50,12 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         case "Spin":
             setWinners($RS.spin());
             $scope.showResult = true;
+            $log.log($scope.stats);
             $scope.step = "New Game";
             break;
         case "New Game":
             clearWinners();
             $scope.showResult = false;
-            $log.log($scope.stats);
             $scope.step = "Finish Betting";
             break;
         default:
