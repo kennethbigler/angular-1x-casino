@@ -35,9 +35,10 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                 }
             }
             // End game, dont call eval
-            $scope.stayf = false;
-            
+            $scope.hitf = $scope.doublef = $scope.splitf = $scope.stayf = false;
+            $scope.hands = hands;
         }
+        return;
     }
     // Dealer hits on 16 or less and soft 17
     function playDealer() {
@@ -45,8 +46,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         while ((n < 17) || (n === 17 && $BS.soft)) {
             $scope.dealer.push($deck.deal(1)[0]);
             n = $BS.weight($scope.dealer);
-            //$log.log(n);
         }
+        return;
     }
     // AI: https://www.blackjackinfo.com/blackjack-basic-strategy-engine/
     function playBot() {
@@ -214,6 +215,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         } else {
             $storage.sub($scope.bet[s], d);
         }
+        return;
     }
     // check if splits, otherwise evaluate as normal
     function evaluate() {
@@ -227,6 +229,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             payout(i, i - temp);
         }
         $scope.stayf = false;
+        return;
     }
     // change ui from bets to play
     function resetVars() {
@@ -243,6 +246,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         if (x === y || ((x >= 10 && x <= 13) && (y >= 10 && y <= 13))) {
             $scope.splitf = true;
         }
+        return;
     }
 /********************     Gameplay Functions     ********************/
     // modify bet
@@ -253,6 +257,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         } else if ($scope.bet[p] > 100) {
             $scope.bet[p] = 100;
         }
+        return;
     };
     // transition from bets to play
     $scope.showHand = function () {
@@ -260,6 +265,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         $scope.hands = [hands[turn]];
         resetVars();
         checkBlackjack();
+        return;
     };
     // player gets an extra card, forced to stay on x >= 21
     $scope.hit = function () {
@@ -270,6 +276,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         }
         // hide double and split
         $scope.doublef = $scope.splitf = false;
+        return;
     };
     // switches to the next players turn
     $scope.stay = function () {
@@ -297,6 +304,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             $scope.hands = hands;
             playDealer();
             evaluate();
+            return;
         }
     };
     // takes 1 hand of doubles, and turns it into 2 hands, duplicates bet
@@ -324,12 +332,14 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             $scope.ai += 1;
             //$log.log("ai split");
         }
+        return;
     };
     // double bet and get only 1 card
     $scope.double = function () {
         $scope.bet[turn] += $scope.bet[turn];
         hands[turn].push($deck.deal(1)[0]);
         $scope.hitf = $scope.doublef = $scope.splitf = false;
+        return;
     };
     // new game
     $scope.newGame = function () {
@@ -349,6 +359,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         // start the game
         $BS.soft = $scope.hitf = $scope.doublef = $scope.splitf = false;
         $scope.stayf = $scope.playersf = $scope.showHandf = true;
+        return;
     };
     /* To do list:
     // if split aces is bj, its not bj, check for this?
@@ -363,6 +374,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         $scope.ai = 6 - n;
         $('.btn-danger').removeClass('btn-danger');
         $('#b' + n).addClass('btn-danger');
+        return;
     };
 /********************     Testing Code     ********************/
     $scope.newGame();
