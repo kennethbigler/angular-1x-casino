@@ -35,8 +35,9 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                 }
             }
             // End game, dont call eval
-            $scope.hitf = $scope.doublef = $scope.splitf = $scope.stayf = false;
+            $scope.hitf = $scope.doublef = $scope.splitf = false;
             $scope.hands = hands;
+            $scope.stayf = false;
         }
         return;
     }
@@ -58,76 +59,64 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         while (n < 22) {
             // split algorithm
             if (x === y) {
-                if (x === 2 || x === 3 || x === 7) {
-                    // 2,3,7, split d2-7, hit d8+
+                if (x === 2 || x === 3 || x === 7) { // 2,3,7, split d2-7, hit d8+
                     if (d <= 7) {
                         $scope.split();
                     } else {
                         $scope.hit();
                     }
-                } else if (x === 4) {
-                    // 4, split d5-6, else hit
+                } else if (x === 4) { // 4, split d5-6, else hit
                     if (d === 5 || d === 6) {
                         $scope.split();
                     } else {
                         $scope.hit();
                     }
-                } else if (x === 5) {
-                    // 5, double d2-9, hit d10+
+                } else if (x === 5) { // 5, double d2-9, hit d10+
                     if (d <= 9) {
                         $scope.double();
                     } else {
                         $scope.hit();
                     }
-                } else if (x === 6) {
-                    // 6, split d2-6, else hit
+                } else if (x === 6) { // 6, split d2-6, else hit
                     if (d <= 6) {
                         $scope.split();
                     } else {
                         $scope.hit();
                     }
-                } else if (x === 9) {
-                    // 9, d7,10+ stay, else split
+                } else if (x === 9) { // 9, d7,10+ stay, else split
                     if (d === 7 || d >= 10) {
                         return;
                     } else {
                         $scope.split();
                     }
-                } else if (x === 8 || x === 14) {
-                    // 8,A split
+                } else if (x === 8 || x === 14) { // 8,A split
                     $scope.split();
-                } else {
-                    // 10 Stay
+                } else { // 10 Stay
                     return;
                 }
-            } else if (n < 20 && $BS.soft) {
-                // soft hands, A9+ stays
-                if (n === 13 || n === 14) {
-                    // A2-A3 double d5-6, hit d2-4, d7-A
+            } else if (n < 20 && $BS.soft) { // soft hands, A9+ stays
+                if (n === 13 || n === 14) { // A2-A3 double d5-6, hit d2-4, d7-A
                     if (d === 5 || d === 6) {
                         $scope.double();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (n === 15 || n === 16) {
-                    // A4-A5 double d4-6, hit d2-3, d7-A
+                } else if (n === 15 || n === 16) { // A4-A5 double d4-6, hit d2-3, d7-A
                     if (d >= 4 && d <= 6) {
                         $scope.double();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (n === 17) {
-                    // A6 double d3-6, hit d2, d7-A
+                } else if (n === 17) { // A6 double d3-6, hit d2, d7-A
                     if (d >= 3 && d <= 6) {
                         $scope.double();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (n === 18) {
-                    // A7 double d2-6, stay d7-8, hit d9-A
+                } else if (n === 18) { // A7 double d2-6, stay d7-8, hit d9-A
                     if (n >= 2 && n <= 6) {
                         $scope.double();
                         return;
@@ -136,8 +125,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                     } else {
                         $scope.hit();
                     }
-                } else if (n === 19) {
-                    // A8 double d6, else stay
+                } else if (n === 19) { // A8 double d6, else stay
                     if (d === 6) {
                         $scope.double();
                         return;
@@ -148,40 +136,33 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                     $log.error("AI " + turn + " Error: n " + n + ", d " + d + ", s " + $BS.soft);
                     return;
                 }
-            } else if (n < 17 && !$BS.soft) {
-                // hard hands, 17+ stays
-                if (n >= 5 && n <= 8) {
-                    // 5-8 hit
+            } else if (n < 17 && !$BS.soft) { // hard hands, 17+ stays
+                if (n >= 5 && n <= 8) { // 5-8 hit
                     $scope.hit();
-                } else if (n === 9) {
-                    // 9 double d3-6, hit d2, d7-A
+                } else if (n === 9) { // 9 double d3-6, hit d2, d7-A
                     if (d >= 3 && d <= 6) {
                         $scope.double();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (n === 10) {
-                    // 10 double d2-9, hit d10-A
+                } else if (n === 10) { // 10 double d2-9, hit d10-A
                     if (d >= 2 && d <= 9) {
                         $scope.double();
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (n === 11) {
-                    // 11 double
+                } else if (n === 11) { // 11 double
                     $scope.double();
                     return;
-                } else if (n === 12) {
-                    // 12 hit d2-3, stay d4-6, hit 7-A
+                } else if (n === 12) { // 12 hit d2-3, stay d4-6, hit 7-A
                     if (d >= 4 && d <= 6) {
                         return;
                     } else {
                         $scope.hit();
                     }
-                } else if (n >= 13 && n <= 16) {
-                    // 13-16 stay d2-6, hit 7-A
+                } else if (n >= 13 && n <= 16) { // 13-16 stay d2-6, hit 7-A
                     if (d >= 2 && d <= 6) {
                         return;
                     } else {
