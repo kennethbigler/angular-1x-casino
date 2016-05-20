@@ -3,7 +3,7 @@
 /* Theoretical Max Score:   386 everyone splits 3 times and busts with 30, dealer bust with 26
  * Card Point Value:        340-380 */
 
-app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'BlackjackService', '$log', function ($scope, $deck, $storage, $BS, $log) {
+app.controller('BlackjackController', ['$scope', 'BlackjackService', '$log', function ($scope, $BS, $log) {
     "use strict";
     // prepare data
     var humans = 1,
@@ -31,7 +31,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         if ($BS.weight($scope.dealer) === 21) {
             for (i = 0; i < hands.length; i += 1) {
                 if ($BS.weight(hands[i]) !== 21) {
-                    $storage.sub($scope.bet[i], i);
+                    $BS.sub($scope.bet[i], i);
                     $scope.winners.push("Loser :(");
                 } else {
                     $scope.winners.push("Push :/");
@@ -47,7 +47,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     function playDealer() {
         var n = $BS.weight($scope.dealer);
         while ((n < 17) || (n === 17 && $BS.soft)) {
-            $scope.dealer.push($deck.deal(1)[0]);
+            $scope.dealer.push($BS.deal(1)[0]);
             n = $BS.weight($scope.dealer);
         }
         return;
@@ -190,15 +190,15 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         var temp, dealer = $BS.weight($scope.dealer);
         temp = $BS.weight(hands[s]);
         if (temp === 21 && hands[s].length === 2) {
-            $storage.add(1.5 * $scope.bet[s], d);
+            $BS.add(1.5 * $scope.bet[s], d);
             $scope.winners.push("BlackJack :D");
         } else if ((temp > dealer || dealer > 21) && temp < 22) {
-            $storage.add($scope.bet[s], d);
+            $BS.add($scope.bet[s], d);
             $scope.winners.push("Winner :)");
         } else if (temp === dealer) {
             $scope.winners.push("Push :/");
         } else {
-            $storage.sub($scope.bet[s], d);
+            $BS.sub($scope.bet[s], d);
             $scope.winners.push("Loser :(");
         }
         return;
@@ -258,7 +258,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     };
     // player gets an extra card, forced to stay on x >= 21
     $scope.hit = function () {
-        hands[turn].push($deck.deal(1)[0]);
+        hands[turn].push($BS.deal(1)[0]);
         // cannot hit on 21 or over
         if ($BS.weight(hands[turn]) >= 21) {
             $scope.hitf = false;
@@ -302,8 +302,8 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         splits.push(turn + 1);
         // insert hands and position holders in bet and names
         splited += 1;
-        hands.splice(turn + 1, 0, [hands[turn].pop(), $deck.deal(1)[0]]);
-        hands[turn].push($deck.deal(1)[0]);
+        hands.splice(turn + 1, 0, [hands[turn].pop(), $BS.deal(1)[0]]);
+        hands[turn].push($BS.deal(1)[0]);
         $scope.hands.push(hands[turn + 1]);
         $scope.bet.splice(turn + 1, 0, $scope.bet[turn]);
         $scope.splitf = false;
@@ -325,7 +325,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     // double bet and get only 1 card
     $scope.double = function () {
         $scope.bet[turn] += $scope.bet[turn];
-        hands[turn].push($deck.deal(1)[0]);
+        hands[turn].push($BS.deal(1)[0]);
         $scope.hitf = $scope.doublef = $scope.splitf = false;
         return;
     };
@@ -337,13 +337,13 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         $scope.winners = [];
         $scope.bet = [5, 5, 5, 5, 5, 5];
         $scope.updateAI(tracker);
-        $deck.shuffle();
+        $BS.shuffle();
         hands = [];
         for (i = 0; i < (humans + $scope.ai); i += 1) {
-            hands[i] = $deck.deal(2);
-            hands[i].sort($deck.rankSort);
+            hands[i] = $BS.deal(2);
+            hands[i].sort($BS.rankSort);
         }
-        $scope.dealer = $deck.deal(2);
+        $scope.dealer = $BS.deal(2);
         $scope.hands = hands;
         // start the game
         $BS.soft = $scope.hitf = $scope.doublef = $scope.splitf = false;
@@ -353,6 +353,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     /* To do list:
     // if split aces is bj, its not bj, check for this?
     // fix player hand representations after splits in end view
+    // change to dealer bj always wins -> buy insurance on A?
     */
 /********************     UI Functions     ********************/
     // update ai and human players

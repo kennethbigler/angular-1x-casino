@@ -1,6 +1,6 @@
 /*global app */
 
-app.factory('PokerService', ['$deck', '$log', function ($deck, $log) {
+app.factory('PokerService', ['$deck', '$storage', '$log', function ($deck, $storage, $log) {
     "use strict";
     var factory = {};
     
@@ -248,6 +248,25 @@ app.factory('PokerService', ['$deck', '$log', function ($deck, $log) {
             }
         }
     };
+    
+    factory.add = function (n, p) {
+        return $storage.add(n, p);
+    };
+    
+    factory.sub = function (n, p) {
+        return $storage.sub(n, p);
+    };
+    
+    factory.deal = function (num) {
+        return $deck.deal(num);
+    };
+    
+    factory.shuffle = function () {
+        $deck.shuffle();
+        return;
+    };
+    
+    factory.rankSort = $deck.rankSort;
     
     return factory;
 }]);

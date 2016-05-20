@@ -34,5 +34,24 @@ app.factory('BlackjackService', ['$deck', '$storage', '$log', function ($deck, $
         return value;
     };
     
+    factory.add = function (n, p) {
+        return $storage.add(n, p);
+    };
+    
+    factory.sub = function (n, p) {
+        return $storage.sub(n, p);
+    };
+    
+    factory.deal = function (num) {
+        return $deck.deal(num);
+    };
+    
+    factory.shuffle = function () {
+        $deck.shuffle();
+        return;
+    };
+    
+    factory.rankSort = $deck.rankSort;
+    
     return factory;
 }]);

@@ -1,6 +1,6 @@
 /*global $, app */
 
-app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService', '$log', function ($scope, $deck, $storage, $PS, $log) {
+app.controller('PokerController', ['$scope', 'PokerService', '$log', function ($scope, $PS, $log) {
     "use strict";
     
     /******************************     Prep Data and Variables     ******************************/
@@ -42,7 +42,6 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
         $scope.dropped = ["", "", "", "", ""];
         $scope.trash = [];
         $scope.discardf = true;
-        //print($PS.hands[$scope.turn]);
     };
     
     // move to the next hand
@@ -79,10 +78,10 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
             $scope.hand = $PS.hands[player];
             $scope.hands = $PS.hands;
             if (player === 0) {
-                $storage.add(40, 0);
+                $PS.add(40, 0);
                 //variable bets
             } else {
-                $storage.sub(10, 0);
+                $PS.sub(10, 0);
                 //variable bets
             }
         } else {
@@ -98,10 +97,10 @@ app.controller('PokerController', ['$scope', '$deck', '$storage', 'PokerService'
     $scope.newGame = function () {
         var i;
         $scope.turn = 0;
-        $deck.shuffle();
+        $PS.shuffle();
         for (i = 0; i < (humans + $scope.ai); i += 1) {
-            $PS.hands[i] = $deck.deal(5);
-            $PS.hands[i].sort($deck.rankSort);
+            $PS.hands[i] = $PS.deal(5);
+            $PS.hands[i].sort($PS.rankSort);
         }
         $scope.discardf = $scope.nextf = $scope.showf = $scope.turnf = false;
         $scope.dropped = ["", "", "", "", ""];
