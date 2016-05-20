@@ -32,6 +32,9 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
             for (i = 0; i < hands.length; i += 1) {
                 if ($BS.weight(hands[i]) !== 21) {
                     $storage.sub($scope.bet[i], i);
+                    $scope.winners.push("Loser :(");
+                } else {
+                    $scope.winners.push("Push :/");
                 }
             }
             // End game, dont call eval
@@ -188,15 +191,15 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         temp = $BS.weight(hands[s]);
         if (temp === 21 && hands[s].length === 2) {
             $storage.add(1.5 * $scope.bet[s], d);
-            $scope.winners.push("Winner");
+            $scope.winners.push("BlackJack :D");
         } else if ((temp > dealer || dealer > 21) && temp < 22) {
             $storage.add($scope.bet[s], d);
-            $scope.winners.push("Winner");
+            $scope.winners.push("Winner :)");
         } else if (temp === dealer) {
-            $scope.winners.push("Push");
+            $scope.winners.push("Push :/");
         } else {
             $storage.sub($scope.bet[s], d);
-            $scope.winners.push("Loser");
+            $scope.winners.push("Loser :(");
         }
         return;
     }

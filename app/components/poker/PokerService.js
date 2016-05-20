@@ -12,7 +12,7 @@ app.factory('PokerService', ['$deck', '$log', function ($deck, $log) {
     */
     factory.discard = function (cards, p) {
         var i;
-        $log.log(p + ": " + cards);
+        //$log.log(p + ": " + cards);
         for (i = 0; i < cards.length; i += 1) {
             factory.hands[p][cards[i]] = $deck.deal(1)[0];
         }
@@ -47,7 +47,7 @@ app.factory('PokerService', ['$deck', '$log', function ($deck, $log) {
         temp = hist.indexOf(4);
         // 4 of a kind
         if (temp !== -1) {
-            $log.log(temp);
+            //$log.log(temp);
             return "7" + temp.toString(13) + "0000";
         }
         temp = hist.indexOf(3);
@@ -144,7 +144,7 @@ app.factory('PokerService', ['$deck', '$log', function ($deck, $log) {
         }
         temp = hist.indexOf(4);
         if (temp !== -1) {
-            $log.log(temp);
+            //$log.log(temp);
             // draw 0 on 4 of a kind
             return "7" + temp.toString(13) + "0000";
         }
