@@ -15,6 +15,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     $scope.turn = 0;
     $scope.ai = 5;
     $scope.hands = [];
+    $scope.winners = [];
     $scope.dealer = [];
     $scope.bet = [];
     // display flags
@@ -187,12 +188,15 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         temp = $BS.weight(hands[s]);
         if (temp === 21 && hands[s].length === 2) {
             $storage.add(1.5 * $scope.bet[s], d);
+            $scope.winners.push("Winner");
         } else if ((temp > dealer || dealer > 21) && temp < 22) {
             $storage.add($scope.bet[s], d);
+            $scope.winners.push("Winner");
         } else if (temp === dealer) {
-            $log.log("draw");
+            $scope.winners.push("Push");
         } else {
             $storage.sub($scope.bet[s], d);
+            $scope.winners.push("Loser");
         }
         return;
     }
@@ -206,6 +210,9 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
                 splits.splice(splits.indexOf(i), 1);
             }
             payout(i, i - temp);
+            //hands[i].push(53);
+            //hands[i].concat(hands[i - temp]);
+            //hands[i].splice((i - temp), 1);
         }
         $scope.stayf = false;
         return;
@@ -324,6 +331,7 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
         var i;
         turn = 0;
         $scope.turn = 0;
+        $scope.winners = [];
         $scope.bet = [5, 5, 5, 5, 5, 5];
         $scope.updateAI(tracker);
         $deck.shuffle();
@@ -342,7 +350,6 @@ app.controller('BlackjackController', ['$scope', '$deck', '$storage', 'Blackjack
     /* To do list:
     // if split aces is bj, its not bj, check for this?
     // fix player hand representations after splits in end view
-    // have a way to display winners and losers and net gains/losses
     */
 /********************     UI Functions     ********************/
     // update ai and human players

@@ -8,7 +8,6 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
     $scope.showResult = false;
     $scope.payout = 0;
     $scope.stats = $RS.calc;
-    $log.log($scope.stats);
     
     /***** UI Functions *****/
     function clearWinners() {
@@ -54,7 +53,6 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
         case "Spin":
             setWinners($RS.spin());
             $scope.showResult = true;
-            $log.log($scope.stats);
             $scope.step = "New Game";
             break;
         case "New Game":

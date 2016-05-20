@@ -259,5 +259,10 @@ window.cards = [
         "rank": 14,
         "suit": "♠",
         "color": {"color" : "#02050D"}
+    }, {
+        "name": "",
+        "rank": 0,
+        "suit": "♣",
+        "color": {"color" : "#02050D"}
     }
 ];
