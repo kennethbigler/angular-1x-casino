@@ -59,6 +59,9 @@ header {
     font-weight: bold;
     background-color: white;
 }
+.top-space {
+    margin-top: 15px;
+}
 /***** Wording *****/
 .naration {
     margin-bottom: 10px;

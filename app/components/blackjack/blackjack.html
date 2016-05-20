@@ -32,8 +32,8 @@
                     <div class="row">
                         <div class="col-sm-2" ng-repeat="loss in hands track by $index">
                             <h2 class="naration" ng-show="!stayf">{{ winners[$index] }}</h2>
-                            <h2 class="naration" ng-show="!stayf || prePlayf">{{ storage.names[$index] }}:</h2>
-                            <h2 class="naration" ng-hide="!stayf || prePlayf">{{ storage.names[turn] }}:</h2>
+                            <h2 class="naration" ng-show="!stayf || prePlayf">{{ names[$index] }}:</h2>
+                            <h2 class="naration" ng-hide="!stayf || prePlayf">{{ names[turn] }}:</h2>
                             <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color' ng-hide="prePlayf">
                                 {{ card.name }}
                                 <h2 class="suit">{{ card.suit }}</h2>

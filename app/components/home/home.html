@@ -2,15 +2,29 @@
     <header></header>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12">
-                <a class="btn btn-default btn-lg btn-block handc" role="button" ng-click="storage.reset()" ng-hide="df">Reset</a>
-            </div>
-            <div class="col-sm-2" ng-repeat="money in storage.savings track by $index">
-                <h4 class="naration">{{ storage.names[$index] }}: {{ money }}</h4>
+            <button class="btn btn-default btn-lg col-sm-6" role="button" ng-click="reset()">Reset</button>
+            <button class="btn btn-default btn-lg col-sm-6" role="button" ng-click="updateNames()">Save Names</button>
+            <div class="col-sm-2 top-space" ng-repeat="money in savings track by $index">
+                <h4 class="naration">{{ names[$index] }}: {{ money }}</h4>
             </div>
             <form class="form-inline">
-                <div class="form-group col-sm-2" ng-repeat="name in storage.names track by $index">
-                    <input type="text" class="form-control" ng-model="name">
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" ng-model="names[0]">
+                </div>
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" ng-model="names[1]">
+                </div>
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" ng-model="names[2]">
+                </div>
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" ng-model="names[3]">
+                </div>
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" ng-model="names[4]">
+                </div>
+                <div class="form-group col-sm-2">
+                    <input type="text" class="form-control" ng-model="names[5]">
                 </div>
             </form>
         </div>        

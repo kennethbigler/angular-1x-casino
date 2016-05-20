@@ -111,31 +111,35 @@ var app = angular.module('myApp', ['ngRoute'])
                 names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
             }
             return {
-                savings: savings,
-                names: names,
+                getSavings: function () {
+                    return savings;
+                },
+                getNames: function () {
+                    return names;
+                },
                 add: function (n, p) {
-                    this.savings[p] += parseInt(n, 10);
-                    $localstorage.putObject('savings', this.savings);
+                    savings[p] += parseInt(n, 10);
+                    $localstorage.putObject('savings', savings);
                 },
                 sub: function (n, p) {
-                    this.savings[p] -= parseInt(n, 10);
-                    $localstorage.putObject('savings', this.savings);
+                    savings[p] -= parseInt(n, 10);
+                    $localstorage.putObject('savings', savings);
                 },
                 name: function (n, p) {
-                    this.names[p] = n;
-                    $localstorage.putObject('names', this.names);
+                    names[p] = n;
+                    $localstorage.putObject('names', names);
                 },
                 resetSavings: function () {
-                    this.savings = [100, 100, 100, 100, 100, 100];
+                    savings = [100, 100, 100, 100, 100, 100];
                     $localstorage.remove('savings');
                 },
                 resetNames: function () {
-                    this.names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
+                    names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
                     $localstorage.remove('names');
                 },
                 reset: function () {
-                    this.savings = [100, 100, 100, 100, 100, 100];
-                    this.names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
+                    savings = [100, 100, 100, 100, 100, 100];
+                    names = ["Player 1", "AI 2", "AI 3", "AI 4", "AI 5", "AI 6"];
                     $localstorage.remove('savings');
                     $localstorage.remove('names');
                 },

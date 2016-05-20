@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-sm-12">
                     <hr ng-hide="turnf" />
-                    <h2 class="naration">Player {{ turn + 1 }}<span ng-show="discardf && nextf"> Wins!</span></h2>
+                    <h2 class="naration">{{ names[turn] }}<span ng-show="discardf && nextf"> Wins!</span></h2>
                     <a class="btn btn-default btn-lg handc" role="button" ng-click="showf = true" ng-hide="showf">Show Hand</a>
                     <div ng-repeat="card in hand track by $index" class="playingCard handc" ng-class="dropped[$index]" ng-style='card.color' ng-click="toss($index)" ng-show="showf">
                         {{ card.name }}
@@ -27,7 +27,7 @@
                     <span class="clear"></span>
                     <hr ng-show="discardf && nextf"/>
                     <div ng-repeat="loss in hands track by $index">
-                        <h2 class="naration pline inline">Player {{ $index + 1 }}:&nbsp;</h2>
+                        <h2 class="naration pline inline">{{ names[$index] }}:&nbsp;</h2>
                         <div ng-repeat="card in loss" class="playingCard handc" ng-style='card.color'>
                             {{ card.name }}
                             <h2 class="suit">{{ card.suit }}</h2>
