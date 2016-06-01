@@ -1,0 +1,15 @@
+<header></header>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12" ng-repeat="hand in hands track by $index">
+            <div ng-repeat="card in hand" class="playingCard handc" ng-style='card.color'>
+                {{ card.name }}
+                <h2 class="suit">{{ card.suit }}</h2>
+            </div>
+            <span class="clear"></span>
+        </div>
+        <div class="col-sm-12" ng-repeat="bidrow in bids track by $index" ng-init="$rowIndex = $index">
+            <button ng-repeat="mybid in bidrow track by $index" type="button" class="btn btn-default btn-sm inline" ng-click="setBid($rowIndex, $index)">{{ mybid }}</button>
+        </div>
+    </div>
+</div>

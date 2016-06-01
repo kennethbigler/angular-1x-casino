@@ -20,6 +20,9 @@ app.config(function ($routeProvider) {
         }).when('/solitaire', {
             templateUrl: 'app/components/solitaire/solitaire.html',
             controller: 'SolitaireController'
+        }).when('/bridge', {
+            templateUrl: 'app/components/bridge/bridge.html',
+            controller: 'BridgeController'
         }).otherwise({ redirectTo: '/' });
     // use the HTML5 History API
     // $locationProvider.html5Mode(true);

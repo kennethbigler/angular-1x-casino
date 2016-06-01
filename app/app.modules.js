@@ -42,40 +42,40 @@ var app = angular.module('myApp', ['ngRoute'])
                 suitSort: function (a, b) {
                     var ta, tb;
                     switch (a.suit) {
-                    case "♦":
-                        ta = 0;
-                        break;
                     case "♣":
-                        ta = 1;
+                        ta = 20;
+                        break;
+                    case "♦":
+                        ta = 40;
                         break;
                     case "♥":
-                        ta = 2;
+                        ta = 60;
                         break;
                     case "♠":
-                        ta = 3;
+                        ta = 80;
                         break;
                     default:
                         ta = 0;
                         $log.error("Error! Suit is " + a.suit);
                     }
                     switch (b.suit) {
-                    case "♦":
-                        tb = 0;
-                        break;
                     case "♣":
-                        tb = 1;
+                        tb = 20;
+                        break;
+                    case "♦":
+                        tb = 40;
                         break;
                     case "♥":
-                        tb = 2;
+                        tb = 60;
                         break;
                     case "♠":
-                        tb = 3;
+                        tb = 80;
                         break;
                     default:
                         tb = 0;
                         $log.error("Error! Suit is " + b.suit);
                     }
-                    return ta - tb;
+                    return (ta + a.rank) - (tb + b.rank);
                 }
             };
         }])

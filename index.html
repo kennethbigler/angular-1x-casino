@@ -14,8 +14,8 @@
     [
         'https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js',
         'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js',
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js',
-        'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js',
+        'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.js',
+        'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js',
         'assets/js/cards.js',
         'app/app.modules.js',
         'app/app.routes.js',
@@ -29,7 +29,9 @@
         'app/components/roulette/RouletteController.js',
         'app/components/roulette/RouletteService.js',
         'app/components/solitaire/SolitaireController.js',
-        'app/components/solitaire/SolitaireService.js'
+        'app/components/solitaire/SolitaireService.js',
+        'app/components/bridge/BridgeController.js',
+        'app/components/bridge/BridgeService.js'
     ].forEach(function(src) {
         var script = document.createElement('script');
         script.src = src;
@@ -72,6 +74,7 @@
                     <!--<li ng-class="getClass('/craps')"><a href="#/craps" ng-click="closeNav()">Craps</a></li>-->
                     <li ng-class="getClass('/poker')"><a href="#/poker" ng-click="closeNav()">Poker</a></li>
                     <li ng-class="getClass('/roulette')"><a href="#/roulette" ng-click="closeNav()">Roulette</a></li>
+                    <li ng-class="getClass('/bridge')"><a href="#/bridge" ng-click="closeNav()">Bridge</a></li>
                     <!--<li ng-class="getClass('/solitaire')"><a href="#/solitaire" ng-click="closeNav()">Solitaire</a></li>-->
                 </ul>
             </div><!-- /Menu -->
