@@ -20,7 +20,7 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
         turn = 1;
         sum = 3418418;
         cases = 26;
-        $scope.counter = 6;
+        $scope.counter = 7;
         $scope.offer = (sum / cases) * (turn / 10);
         
         return;
@@ -30,12 +30,22 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
     $scope.caseSelect = function (x) {
         if ($scope.counter === 0) {
             return;
+        } else if ($scope.counter === 7) {
+            $scope.counter -= 1;
+            $scope.caseClass[x] = "btn-success";
+            $DS.openCase(x);
+            return;
         }
-        var t, n = $DS.openCase(x),
-            vals = [1, 2, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
+        
+        var t, n, vals = [1, 2, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
+        
+        n = $DS.openCase(x);
+        if (!n) {
+            return;
+        }
+        
         $scope.board[x] = n;
         $scope.caseClass[x] = 'btn-danger';
-        
         t = vals.indexOf(n);
         $scope.valClass[t] = 'btn-danger';
         $scope.counter -= 1;

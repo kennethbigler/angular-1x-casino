@@ -35,8 +35,12 @@ app.factory('DealService', ['$log', function ($log) {
     };
     
     factory.openCase = function (x) {
-        board[x].on = false;
-        return board[x].val;
+        if (board[x].on) {
+            board[x].on = false;
+            return board[x].val;
+        } else {
+            return false;
+        }
     };
     
     factory.newGame = function () {
