@@ -31,7 +31,10 @@
         'app/components/solitaire/SolitaireController.js',
         'app/components/solitaire/SolitaireService.js',
         'app/components/bridge/BridgeController.js',
-        'app/components/bridge/BridgeService.js'
+        'app/components/bridge/BridgeService.js',
+        'app/components/dealOrNoDeal/DealController.js',
+        'app/components/dealOrNoDeal/DealService.js',
+        
     ].forEach(function(src) {
         var script = document.createElement('script');
         script.src = src;
@@ -74,7 +77,7 @@
                     <!--<li ng-class="getClass('/craps')"><a href="#/craps" ng-click="closeNav()">Craps</a></li>-->
                     <li ng-class="getClass('/poker')"><a href="#/poker" ng-click="closeNav()">Poker</a></li>
                     <li ng-class="getClass('/roulette')"><a href="#/roulette" ng-click="closeNav()">Roulette</a></li>
-                    <li ng-class="getClass('/bridge')"><a href="#/bridge" ng-click="closeNav()">Bridge</a></li>
+                    <li ng-class="getClass('/deal')"><a href="#/deal" ng-click="closeNav()">Deal Or No Deal</a></li>
                     <!--<li ng-class="getClass('/solitaire')"><a href="#/solitaire" ng-click="closeNav()">Solitaire</a></li>-->
                 </ul>
             </div><!-- /Menu -->

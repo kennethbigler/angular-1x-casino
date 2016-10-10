@@ -101,8 +101,8 @@ header {
 .black {
     background-color: #02050D;
 }
-.blue {
-    background-color: darkblue;
+.winner {
+    background-color: goldenrod;
 }
 .noborder {
     border: 0 !important;

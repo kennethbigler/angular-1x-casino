@@ -12,9 +12,9 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
     /***** UI Functions *****/
     function clearWinners() {
         var reset = [];
-        reset = document.getElementsByClassName("blue");
+        reset = document.getElementsByClassName("winner");
         while (reset.length > 0) {
-            reset[0].classList.remove("blue");
+            reset[0].classList.remove("winner");
         }
         $RS.reset();
         return;
@@ -25,7 +25,7 @@ app.controller('RouletteController', ['$scope', 'RouletteService', '$log', funct
             i = 0;
         winners = document.getElementsByClassName("s" + spin);
         for (i = 0; i < winners.length; i += 1) {
-            winners[i].classList.add("blue");
+            winners[i].classList.add("winner");
         }
         $scope.payout = $RS.evaluate(spin);
         return;

@@ -23,6 +23,12 @@ app.config(function ($routeProvider) {
         }).when('/bridge', {
             templateUrl: 'app/components/bridge/bridge.html',
             controller: 'BridgeController'
+        }).when('/slots', {
+            templateUrl: 'app/components/slots/slots.html',
+            controller: 'SlotsController'
+        }).when('/deal', {
+            templateUrl: 'app/components/dealOrNoDeal/deal.html',
+            controller: 'DealController'
         }).otherwise({ redirectTo: '/' });
     // use the HTML5 History API
     // $locationProvider.html5Mode(true);
