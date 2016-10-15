@@ -10,6 +10,7 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
     $scope.counter = 0;
     $scope.offer = 0;
     $scope.showOffer = false;
+    $scope.showWinnings = false;
     
     // reset game variables to start fresh
     $scope.newGame = function () {
@@ -24,6 +25,7 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
         cases = 26;
         $scope.counter = 7;
         $scope.showOffer = false;
+        $scope.showWinnings = false;
         return;
     };
     $scope.newGame();
@@ -69,12 +71,17 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
     
     // called on selection of Deal
     $scope.deal = function () {
-        $scope.newGame();
+        $scope.showWinnings = true;
         return;
     };
     
     // called on selection of No Deal
     $scope.noDeal = function () {
+        // saying no deal on last case procs deal
+        if (cases === 1) {
+            $scope.deal();
+            return;
+        }
         $scope.showOffer = false;
         turn += 1;
         $scope.counter = (turn < 6) ? 7 - turn : 1;

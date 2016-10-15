@@ -68,13 +68,18 @@
         <div class="col-sm-6 btn btn-default btn-lg handc" ng-class="valClass[25]">1000000</div>
     </div>
     <hr />
-    <div class="row" ng-show="!showOffer">
+    <div class="row" ng-show="!showOffer && !showWinnings">
         <h2 class="naration">Cases Left: {{ counter }}</h2>
     </div>
-    <div class="row" ng-show="showOffer">
+    <div class="row" ng-show="showOffer && !showWinnings">
         <h2 class="naration col-sm-3">Offer: ${{ offer | number: 0 }}</h2>
         <div class="col-sm-4 btn btn-default btn-lg handc btn-primary" ng-click="deal()">Deal</div>
         <div class="col-sm-1"></div>
         <div class="col-sm-4 btn btn-default btn-lg handc btn-danger" ng-click="noDeal()">No Deal</div>
+    </div>
+    <div class="row" ng-show="showWinnings">
+        <h2 class="col-sm-4 naration">You Won ${{ offer | number: 0 }}</h2>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6 btn btn-default btn-lg handc btn-danger" ng-click="newGame()">New Game</div>
     </div>
 </div>
