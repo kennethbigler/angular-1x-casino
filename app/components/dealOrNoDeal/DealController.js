@@ -1,14 +1,18 @@
 /*global $, app */
-
-app.controller('DealController', ['$scope', 'DealService', '$log', function ($scope, $DS, $log) {
+app.controller('DealController', ['$scope', 'DealService', function ($scope, $DS) {
     "use strict";
     
-    var i, turn, sum, cases, board = $DS.board();
+    // local variables
+    var i, turn, sum, cases,
+        board = $DS.board(),
+        vals = [1, 2, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
+    // scope variables
     $scope.board = [];
     $scope.caseClass = [];
     $scope.valClass = [];
     $scope.counter = 0;
     $scope.offer = 0;
+    $scope.myCase = {loc: 0, val: 0 };
     $scope.showOffer = false;
     $scope.showWinnings = false;
     
@@ -28,21 +32,25 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
         $scope.showWinnings = false;
         return;
     };
+    // initiate first game
     $scope.newGame();
     
     // called each time a case is selected
     $scope.caseSelect = function (x) {
-        // if clicking a case w/ no cases to open left or first click
         if ($scope.counter === 0) {
+            // do not allow people to open cases if not right time
             return;
         } else if ($scope.counter === 7) {
+            // first case selected as yours
             $scope.counter -= 1;
             $scope.caseClass[x] = "btn-success";
-            $DS.openCase(x);
+            $scope.myCase.val = $DS.openCase(x);
+            $scope.myCase.loc = x;
             return;
         }
-        
-        var t, n, vals = [1, 2, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000];
+        // open all other cases
+        // local variables
+        var t, n;
         
         // verify case has not been opened already
         n = $DS.openCase(x);
@@ -51,12 +59,12 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
         }
         
         // change visuals of selected case
-        $scope.board[x] = n;
+        $scope.board[x] = '$' + n;
         $scope.caseClass[x] = 'btn-danger';
         t = vals.indexOf(n);
         $scope.valClass[t] = 'btn-danger';
         
-        // update for offer
+        // update calculations for offer
         sum -= n;
         cases -= 1;
         
@@ -71,6 +79,9 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
     
     // called on selection of Deal
     $scope.deal = function () {
+        // set suitcase value
+        $scope.board[$scope.myCase.loc] = '$' + $scope.myCase.val;
+        // show final board
         $scope.showWinnings = true;
         return;
     };
@@ -82,7 +93,9 @@ app.controller('DealController', ['$scope', 'DealService', '$log', function ($sc
             $scope.deal();
             return;
         }
+        // go back to play view
         $scope.showOffer = false;
+        // advance the turn and reset the counter
         turn += 1;
         $scope.counter = (turn < 6) ? 7 - turn : 1;
         return;
